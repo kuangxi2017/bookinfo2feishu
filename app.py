@@ -122,6 +122,84 @@ def process_isbn():
             logger.error(f"添加飞书图书记录时发生异常 (ISBN: {isbn}): {e}")
             return jsonify({"code": 500, "message": "添加飞书记录时发生错误"})
 
+@app.route('/get_book_info', methods=['GET'])
+def get_book_info():
+    """获取豆瓣图书信息"""
+    isbn = request.args.get('isbn')
+    if not isbn:
+        logger.warning("请求缺少ISBN参数")
+        return jsonify({"code": 400, "message": "缺少ISBN参数"})
+    
+    logger.info(f"获取豆瓣图书信息: {isbn}")
+
+    # 从豆瓣获取图书信息
+    book_info = douban_scraper.get_book_info(isbn)
+    if not book_info:
+        logger.warning(f"未找到ISBN为 {isbn} 的图书信息")
+        return jsonify({"code": 404, "message": "未找到图书信息"})
+
+    return jsonify({
+        "code": 200, 
+        "message": "获取图书信息成功", 
+        "book_info": book_info
+    })
+
+@app.route('/sync_to_feishu', methods=['POST'])
+def sync_to_feishu():
+    """同步图书信息到飞书"""
+    data = request.get_json()
+    if not data or not data.get('book_info'):
+        logger.warning("同步请求缺少图书信息")
+        return jsonify({"code": 400, "message": "缺少图书信息"})
+    
+    book_info = data['book_info']
+    isbn = book_info.get('ISBN')
+    field_mappings = data.get('field_mappings', {})
+    
+    logger.info(f"开始同步图书到飞书: {book_info.get('book_name')} (ISBN: {isbn})")
+
+    # 查询飞书中是否已存在该图书
+    try:
+        record_id = feishu_api.search_book_by_isbn(isbn)
+    except Exception as e:
+        logger.error(f"查询飞书记录失败 (ISBN: {isbn}): {e}")
+        return jsonify({"code": 500, "message": "查询飞书记录失败"})
+
+    # 准备飞书数据，应用字段映射
+    feishu_data = {"fields": {}}
+    for douban_field, feishu_field_id in field_mappings.items():
+        if feishu_field_id and book_info.get(douban_field) is not None:
+            # 特殊处理豆瓣链接
+            if douban_field == 'url':
+                feishu_data["fields"][feishu_field_id] = {"link": book_info['url']}
+            else:
+                feishu_data["fields"][feishu_field_id] = book_info[douban_field]
+
+    if record_id:
+        # 更新现有记录
+        logger.info(f"更新飞书记录: {record_id}")
+        try:
+            success = feishu_api.update_book(record_id, feishu_data)
+            if success:
+                logger.info(f"成功更新图书: {book_info.get('book_name')}")
+                return jsonify({"code": 200, "message": "图书信息更新成功"})
+            return jsonify({"code": 500, "message": "更新飞书图书记录失败"})
+        except Exception as e:
+            logger.error(f"更新飞书记录失败: {e}")
+            return jsonify({"code": 500, "message": "更新飞书记录失败"})
+    else:
+        # 创建新记录
+        logger.info("创建新飞书记录")
+        try:
+            success = feishu_api.create_book(feishu_data)
+            if success:
+                logger.info(f"成功添加图书: {book_info.get('book_name')}")
+                return jsonify({"code": 201, "message": "图书添加成功"})
+            return jsonify({"code": 500, "message": "添加图书到飞书失败"})
+        except Exception as e:
+            logger.error(f"添加飞书记录失败: {e}")
+            return jsonify({"code": 500, "message": "添加飞书记录失败"})
+
 @app.route('/', methods=['GET'])
 def index():
     """渲染首页"""

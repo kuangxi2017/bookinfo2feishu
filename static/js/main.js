@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
             showMessage('请输入 ISBN', 'error');
             return;
         }
-        showMessage('正在处理...', 'info');
+        showMessage('正在获取书籍信息...', 'info');
         bookInfoArea.innerHTML = '';
 
         try {
-            const response = await fetch(`/isbn?isbn=${encodeURIComponent(isbn)}`);
+            const response = await fetch(`/get_book_info?isbn=${encodeURIComponent(isbn)}`);
             const data = await response.json();
 
             if (response.ok) {
@@ -42,11 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     submitBtn.style.display = 'none';
                 }
             } else {
-                showMessage(data.message || '处理失败', 'error');
+                showMessage(data.message || '获取书籍信息失败', 'error');
             }
         } catch (error) {
-            console.error('请求失败:', error);
-            showMessage('请求失败，请检查网络连接或服务器状态。', 'error');
+            console.error('获取书籍信息失败:', error);
+            showMessage('获取书籍信息失败，请检查网络连接或服务器状态。', 'error');
         }
     });
 
@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selects = document.querySelectorAll('.field-select');
         selects.forEach(select => {
             const fieldName = select.id.replace('map-', '');
-            if (select.value) {
+            if (select.value) { // 仅同步已选择映射的字段
                 mappings[fieldName] = select.value;
             }
         });
@@ -350,6 +350,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (response.ok) {
                 showMessage(data.message || '同步成功', 'success');
+                // 同步成功后重置表单
+                isbnInput.style.display = '';
+                submitBtn.style.display = '';
+                isbnInput.value = '';
+                bookInfoArea.innerHTML = '';
             } else {
                 showMessage(data.message || '同步失败', 'error');
             }
