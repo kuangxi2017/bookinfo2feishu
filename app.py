@@ -12,7 +12,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from flask import Flask, request, jsonify, render_template
 from services.douban_scraper import DoubanScraper
 from services.feishu_api import FeishuAPI
-from config import AppConfig
+from typing import Optional, Dict, Any
+from app_config import AppConfig
 from utils.logger import logger
 
 app = Flask(__name__)

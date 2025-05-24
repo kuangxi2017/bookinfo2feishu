@@ -7,7 +7,7 @@ import os
 # 配置日志
 def setup_logger():
     """设置并返回日志记录器"""
-    from config import AppConfig  # 从 config 模块导入 AppConfig
+    from app_config import AppConfig  # 从 app_config 模块导入 AppConfig
     
     # 创建日志记录器
     logger = logging.getLogger('bookinfo2feishu')

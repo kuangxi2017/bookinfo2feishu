@@ -23,3 +23,127 @@
 2025-05-24 18:28:24,349 - WARNING - 飞书API凭证未配置，API调用可能会失败
 2025-05-24 18:28:24,349 - WARNING - 飞书多维表格配置未完成，数据操作可能会失败
 2025-05-24 18:28:24,349 - ERROR - 无法获取飞书租户访问令牌：缺少应用凭证
+2025-05-24 20:49:06,218 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 20:49:06,219 - bookinfo2feishu - WARNING - Feishu App ID (FEISHU_APP_ID) or App Secret (FEISHU_APP_SECRET) is not configured. Token acquisition and most API calls will fail.
+2025-05-24 20:49:06,219 - bookinfo2feishu - WARNING - Feishu App Token (FEISHU_APP_TOKEN) for the multi-dimensional table is not configured. Operations on table records (create, update, search, get_fields, upload_image to bitable) will fail.
+2025-05-24 20:49:06,219 - bookinfo2feishu - WARNING - Feishu Table ID (FEISHU_TABLE_ID) is not configured. Operations on table records (create, update, search, get_fields) will fail.
+2025-05-24 20:49:06,219 - bookinfo2feishu - ERROR - Cannot acquire Feishu tenant access token: App ID or App Secret is missing.
+2025-05-24 20:49:33,731 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 20:49:33,731 - bookinfo2feishu - WARNING - Feishu App ID (FEISHU_APP_ID) or App Secret (FEISHU_APP_SECRET) is not configured. Token acquisition and most API calls will fail.
+2025-05-24 20:49:33,731 - bookinfo2feishu - WARNING - Feishu App Token (FEISHU_APP_TOKEN) for the multi-dimensional table is not configured. Operations on table records (create, update, search, get_fields, upload_image to bitable) will fail.
+2025-05-24 20:49:33,731 - bookinfo2feishu - WARNING - Feishu Table ID (FEISHU_TABLE_ID) is not configured. Operations on table records (create, update, search, get_fields) will fail.
+2025-05-24 20:49:33,731 - bookinfo2feishu - ERROR - Cannot acquire Feishu tenant access token: App ID or App Secret is missing.
+2025-05-24 20:49:33,896 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 20:49:33,896 - bookinfo2feishu - WARNING - Feishu App ID (FEISHU_APP_ID) or App Secret (FEISHU_APP_SECRET) is not configured. Token acquisition and most API calls will fail.
+2025-05-24 20:49:33,896 - bookinfo2feishu - WARNING - Feishu App Token (FEISHU_APP_TOKEN) for the multi-dimensional table is not configured. Operations on table records (create, update, search, get_fields, upload_image to bitable) will fail.
+2025-05-24 20:49:33,896 - bookinfo2feishu - WARNING - Feishu Table ID (FEISHU_TABLE_ID) is not configured. Operations on table records (create, update, search, get_fields) will fail.
+2025-05-24 20:49:33,896 - bookinfo2feishu - ERROR - Cannot acquire Feishu tenant access token: App ID or App Secret is missing.
+2025-05-24 21:00:17,390 - bookinfo2feishu - INFO - 已保存飞书配置到文件
+2025-05-24 21:00:17,391 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 21:00:17,579 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 21:00:17,580 - bookinfo2feishu - INFO - 飞书配置已更新: AppID: cli_a246770639f8900c, TableID: tblQp2OQgxamLR3x
+2025-05-24 21:01:38,959 - bookinfo2feishu - INFO - 收到ISBN请求: 9787020180431
+2025-05-24 21:01:38,965 - bookinfo2feishu - INFO - Attempting to scrape Douban for ISBN: 9787020180431 at URL: https://douban.com/isbn/9787020180431
+2025-05-24 21:01:40,251 - bookinfo2feishu - INFO - Successfully scraped book: 中国记事 (ISBN: 9787020180431)
+2025-05-24 21:01:40,252 - bookinfo2feishu - INFO - Searching for book with ISBN: 9787020180431 in table: tblQp2OQgxamLR3x
+2025-05-24 21:01:42,050 - bookinfo2feishu - INFO - Found book with ISBN 9787020180431, record_id: recuM6tGUaQqnl
+2025-05-24 21:01:42,051 - bookinfo2feishu - INFO - ISBN 9787020180431 已存在于飞书，记录ID: recuM6tGUaQqnl，开始更新信息...
+2025-05-24 21:01:42,051 - bookinfo2feishu - INFO - Updating book record_id: recuM6tGUaQqnl in table: tblQp2OQgxamLR3x
+2025-05-24 21:01:43,469 - bookinfo2feishu - INFO - Successfully updated book record_id: recuM6tGUaQqnl
+2025-05-24 21:01:43,469 - bookinfo2feishu - INFO - 成功更新图书: 中国记事 (ISBN: 9787020180431)
+2025-05-24 22:06:27,257 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-24 22:06:27,715 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-24 22:12:37,274 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:12:37,275 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:12:38,442 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:12:52,199 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-24 22:12:52,601 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-24 22:14:32,904 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:14:32,905 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:14:33,042 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:18:16,031 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:18:16,031 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:18:16,167 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:18:16,310 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:18:16,310 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:18:16,460 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:19:08,180 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:19:08,180 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:19:08,328 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:19:08,466 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:19:08,466 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:19:08,605 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:21:32,400 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:21:32,400 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:21:32,546 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:21:32,691 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:21:32,691 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:21:32,853 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:23:20,538 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:23:20,539 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:23:20,682 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:23:20,837 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:23:20,837 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:23:20,986 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:23:48,796 - bookinfo2feishu - INFO - 已保存飞书配置到文件
+2025-05-24 22:23:48,798 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:23:48,953 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:23:48,954 - bookinfo2feishu - INFO - 飞书配置已更新: AppID: cli_a246770639f8900c, TableID: tblQp2OQgxamLR3x
+2025-05-24 22:23:50,395 - bookinfo2feishu - INFO - 收到ISBN请求: 9787020180431
+2025-05-24 22:23:50,395 - bookinfo2feishu - INFO - Attempting to scrape Douban for ISBN: 9787020180431 at URL: https://douban.com/isbn/9787020180431
+2025-05-24 22:23:52,048 - bookinfo2feishu - INFO - Successfully scraped book: 中国记事 (ISBN: 9787020180431)
+2025-05-24 22:23:52,049 - bookinfo2feishu - INFO - Searching for book with ISBN: 9787020180431 in table: tblQp2OQgxamLR3x
+2025-05-24 22:24:07,935 - bookinfo2feishu - INFO - Found book with ISBN 9787020180431, record_id: recuM6tGUaQqnl
+2025-05-24 22:24:07,940 - bookinfo2feishu - INFO - ISBN 9787020180431 已存在于飞书，记录ID: recuM6tGUaQqnl，开始更新信息...
+2025-05-24 22:24:07,940 - bookinfo2feishu - INFO - Updating book record_id: recuM6tGUaQqnl in table: tblQp2OQgxamLR3x
+2025-05-24 22:24:08,865 - bookinfo2feishu - INFO - Successfully updated book record_id: recuM6tGUaQqnl
+2025-05-24 22:24:08,865 - bookinfo2feishu - INFO - 成功更新图书: 中国记事 (ISBN: 9787020180431)
+2025-05-24 22:24:08,873 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-24 22:24:09,150 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-24 22:32:05,632 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:32:05,632 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:32:05,813 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:32:05,966 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:32:05,966 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:32:06,148 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:34:49,777 - bookinfo2feishu - INFO - 收到ISBN请求: 9787020180431
+2025-05-24 22:34:49,785 - bookinfo2feishu - INFO - Attempting to scrape Douban for ISBN: 9787020180431 at URL: https://douban.com/isbn/9787020180431
+2025-05-24 22:34:51,310 - bookinfo2feishu - INFO - Successfully scraped book: 中国记事 (ISBN: 9787020180431)
+2025-05-24 22:34:51,312 - bookinfo2feishu - INFO - Searching for book with ISBN: 9787020180431 in table: tblQp2OQgxamLR3x
+2025-05-24 22:34:52,826 - bookinfo2feishu - INFO - Found book with ISBN 9787020180431, record_id: recuM6tGUaQqnl
+2025-05-24 22:34:52,826 - bookinfo2feishu - INFO - ISBN 9787020180431 已存在于飞书，记录ID: recuM6tGUaQqnl，开始更新信息...
+2025-05-24 22:34:52,826 - bookinfo2feishu - INFO - Updating book record_id: recuM6tGUaQqnl in table: tblQp2OQgxamLR3x
+2025-05-24 22:34:53,816 - bookinfo2feishu - INFO - Successfully updated book record_id: recuM6tGUaQqnl
+2025-05-24 22:34:53,816 - bookinfo2feishu - INFO - 成功更新图书: 中国记事 (ISBN: 9787020180431)
+2025-05-24 22:34:53,824 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-24 22:34:54,142 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-24 22:40:00,066 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:40:00,067 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:40:00,310 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:42:08,182 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:42:08,182 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:42:08,320 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:42:32,758 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:42:32,758 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:42:32,887 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:42:44,933 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:42:44,934 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:42:45,072 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:43:11,571 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:43:11,572 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:43:11,703 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:44:13,335 - bookinfo2feishu - INFO - 已保存飞书配置到文件
+2025-05-24 22:44:13,337 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:44:13,467 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-24 22:44:13,468 - bookinfo2feishu - INFO - 飞书配置已更新: AppID: cli_a246770639f8900c, TableID: tblQp2OQgxamLR3x
+2025-05-24 22:44:26,820 - bookinfo2feishu - INFO - 收到ISBN请求: 9787020180431
+2025-05-24 22:44:26,824 - bookinfo2feishu - INFO - Attempting to scrape Douban for ISBN: 9787020180431 at URL: https://douban.com/isbn/9787020180431
+2025-05-24 22:44:28,328 - bookinfo2feishu - INFO - Successfully scraped book: 中国记事 (ISBN: 9787020180431)
+2025-05-24 22:44:28,329 - bookinfo2feishu - INFO - Searching for book with ISBN: 9787020180431 in table: tblQp2OQgxamLR3x
+2025-05-24 22:44:29,816 - bookinfo2feishu - INFO - Found book with ISBN 9787020180431, record_id: recuM6tGUaQqnl
+2025-05-24 22:44:29,817 - bookinfo2feishu - INFO - ISBN 9787020180431 已存在于飞书，记录ID: recuM6tGUaQqnl，开始更新信息...
+2025-05-24 22:44:29,817 - bookinfo2feishu - INFO - Updating book record_id: recuM6tGUaQqnl in table: tblQp2OQgxamLR3x
+2025-05-24 22:44:31,494 - bookinfo2feishu - INFO - Successfully updated book record_id: recuM6tGUaQqnl
+2025-05-24 22:44:31,494 - bookinfo2feishu - INFO - 成功更新图书: 中国记事 (ISBN: 9787020180431)
+2025-05-24 22:44:31,503 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-24 22:44:31,836 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.

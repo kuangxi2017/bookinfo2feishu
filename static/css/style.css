@@ -287,3 +287,149 @@ header h1 {
         right: -100%;
     }
 }
+
+/* ======================
+   字段映射配置样式
+   ====================== */
+.mapping-section {
+    margin: 25px 0;
+    padding: 20px;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    border: 1px solid #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.mapping-section h4 {
+    color: #bb86fc;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 400;
+    font-size: 1.2em;
+}
+
+.field-mapping {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    gap: 15px;
+}
+
+.field-mapping span {
+    flex: 1;
+    font-weight: 500;
+    color: #e0e0e0;
+}
+
+.field-select {
+    flex: 2;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background-color: #383838;
+    color: #e0e0e0;
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.field-select:focus {
+    border-color: #bb86fc;
+    box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.25);
+}
+
+.mapping-button, 
+.sync-button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.mapping-button {
+    background-color: #6c757d;
+    color: #e0e0e0;
+}
+
+.sync-button {
+    background-color: #03dac6;
+    color: #121212;
+}
+
+.mapping-button:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sync-button:hover {
+    background-color: #018786;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 映射状态指示器 */
+.map-status {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.map-status.mapped {
+    color: #03dac6;
+}
+
+.map-status.not-mapped {
+    color: #ff6b6b;
+}
+
+/* 映射摘要区域 */
+.mapping-summary {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.mapping-summary.has-mappings {
+    background-color: rgba(3, 218, 198, 0.1);
+    border: 1px solid rgba(3, 218, 198, 0.3);
+}
+
+.mapping-summary.no-mappings {
+    background-color: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+/* 操作按钮区域 */
+.mapping-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .field-mapping {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .field-select {
+        width: 100%;
+    }
+    .mapping-actions {
+        flex-direction: column;
+    }
+    .mapping-button, 
+    .sync-button {
+        width: 100%;
+        margin-top: 0;
+    }
+}

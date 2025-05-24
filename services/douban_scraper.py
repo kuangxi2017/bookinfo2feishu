@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 # 豆瓣爬虫服务
 
+from typing import Optional
 import requests
 import re
 from lxml import etree
@@ -56,14 +57,11 @@ class DoubanScraper:
             book_info['author_name'] = author_name_str
             
             # 提取出版社信息 - XPath: u'//span[./text()="出版社:"]/following::text()[1]' (Text immediately following "出版社:" label)
-            # Note: Douban's HTML structure can vary. Sometimes it's text()[1], sometimes text()[2].
-            # The original code had a fallback, this version tries a common pattern first.
-            press_elements = html.xpath(u'//span[./text()="出版社:"]/following-sibling::text()[1]')
-            press_str = ''.join(press_elements).strip()
-            if not press_str: # Fallback if the first text node is empty or whitespace
-                 press_elements = html.xpath(u'//span[./text()="出版社:"]/following::text()[1]') # Original fallback logic
-                 press_str = ''.join(press_elements).strip()
-            book_info['press'] = press_str
+           
+            press = html.xpath(u'//span[./text()="出版社:"]/following::text()[2]')
+            if not press or ''.join(press).lstrip() == "":
+                press = html.xpath(u'//span[./text()="出版社:"]/following::text()[1]')
+            book_info['press'] = ''.join(press).strip()
             
             # 提取其他基本信息
             # XPath for "出版年:": u'//span[./text()="出版年:"]/following::text()[1]'
