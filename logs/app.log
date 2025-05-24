@@ -147,3 +147,6 @@
 2025-05-24 22:44:31,494 - bookinfo2feishu - INFO - 成功更新图书: 中国记事 (ISBN: 9787020180431)
 2025-05-24 22:44:31,503 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
 2025-05-24 22:44:31,836 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-24 22:47:25,978 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-24 22:47:25,978 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-24 22:47:26,123 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
