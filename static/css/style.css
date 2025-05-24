@@ -1,0 +1,289 @@
+/* 超现代风格 CSS */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #121212; /* 深色背景 */
+    color: #e0e0e0; /* 浅色文字 */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden; /* 防止抽屉打开时出现水平滚动条 */
+}
+
+.container {
+    background-color: #1e1e1e; /* 稍浅的深色背景 */
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* 更深的阴影 */
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* 确保内容在容器内 */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    color: #bb86fc; /* 紫色调，科技感 */
+    margin: 0;
+    font-weight: 300;
+}
+
+.config-button {
+    background: none;
+    border: none;
+    color: #03dac6; /* 青色调，科技感 */
+    font-size: 1.8em;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.config-button:hover {
+    transform: rotate(45deg);
+}
+
+.isbn-input-container {
+    display: flex;
+    margin-bottom: 25px;
+    gap: 10px; /* 输入框和按钮之间的间距 */
+}
+
+#isbn-input {
+    flex-grow: 1;
+    padding: 15px;
+    font-size: 1.1em;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #2c2c2c; /* 输入框背景 */
+    color: #e0e0e0;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#isbn-input:focus {
+    border-color: #bb86fc;
+    box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.3);
+}
+
+#submit-isbn-btn {
+    padding: 15px 25px;
+    font-size: 1.1em;
+    background-color: #03dac6; /* 青色按钮 */
+    color: #121212; /* 深色文字 */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: bold;
+}
+
+#submit-isbn-btn:hover {
+    background-color: #018786; /* 深一点的青色 */
+    transform: translateY(-2px);
+}
+
+#message-area, #book-info-area {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 0.95em;
+}
+
+#message-area.success {
+    background-color: rgba(3, 218, 198, 0.1); /* 青色背景，透明 */
+    color: #03dac6;
+    border: 1px solid #03dac6;
+}
+
+#message-area.error {
+    background-color: rgba(207, 102, 121, 0.1); /* 红色背景，透明 */
+    color: #cf6679; /* Material Design 错误颜色 */
+    border: 1px solid #cf6679;
+}
+
+#book-info-area {
+    background-color: #2c2c2c;
+    border: 1px solid #333;
+}
+
+#book-info-area h3 {
+    color: #bb86fc;
+    margin-top: 0;
+}
+
+#book-info-area p {
+    margin: 8px 0;
+}
+
+/* 抽屉样式 */
+.drawer {
+    position: fixed;
+    top: 0;
+    right: -400px; /* 初始状态在屏幕外，宽度可调整 */
+    width: 380px; /* 抽屉宽度 */
+    height: 100%;
+    background-color: #2a2a2a; /* 抽屉背景色 */
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* 平滑过渡效果 */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* 内容过多时可滚动 */
+}
+
+.drawer.open {
+    right: 0; /* 打开状态 */
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #333333; /* 抽屉头部背景 */
+    border-bottom: 1px solid #444;
+}
+
+.drawer-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #bb86fc;
+    font-weight: 400;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    font-size: 1.8em;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #03dac6;
+}
+
+.drawer-content {
+    padding: 25px;
+    flex-grow: 1;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: calc(100% - 20px); /* 减去padding */
+    padding: 12px;
+    font-size: 1em;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #383838;
+    color: #e0e0e0;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus {
+    border-color: #bb86fc;
+    box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.25);
+}
+
+#save-config-btn, #fetch-fields-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.05em;
+    background-color: #03dac6;
+    color: #121212;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#save-config-btn:hover, #fetch-fields-btn:hover {
+    background-color: #018786;
+}
+
+#fields-mapping-area {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #333;
+    border-radius: 6px;
+    color: #ccc;
+}
+
+#fields-mapping-area h4 {
+    color: #bb86fc;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+#fields-mapping-area div {
+    margin-bottom: 8px;
+    font-size: 0.9em;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+    header h1 {
+        font-size: 2em;
+    }
+    .drawer {
+        width: 85%;
+        right: -90%; /* 调整初始位置以适应更宽的抽屉 */
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    header h1 {
+        margin-bottom: 10px;
+    }
+    .config-button {
+        align-self: flex-end;
+    }
+    .isbn-input-container {
+        flex-direction: column;
+    }
+    #submit-isbn-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+    .drawer {
+        width: 100%;
+        right: -100%;
+    }
+}

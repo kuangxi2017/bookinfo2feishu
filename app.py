@@ -3,13 +3,22 @@
 
 import json
 import os
-from flask import Flask, request, jsonify
+import sys
+from pathlib import Path
+
+# 确保项目根目录在Python路径中
+sys.path.insert(0, str(Path(__file__).parent))
+
+from flask import Flask, request, jsonify, render_template
 from services.douban_scraper import DoubanScraper
 from services.feishu_api import FeishuAPI
 from config import AppConfig
 from utils.logger import logger
 
 app = Flask(__name__)
+
+# 初始化应用配置
+AppConfig.initialize()
 
 # 初始化服务
 douban_scraper = DoubanScraper()
@@ -106,8 +115,89 @@ def process_isbn():
 
 @app.route('/', methods=['GET'])
 def index():
-    """首页"""
-    return "豆瓣图书信息同步到飞书服务已启动，使用 /isbn?isbn=图书ISBN 接口获取图书信息"
+    """渲染首页"""
+    return render_template('index.html')
+
+@app.route('/config', methods=['GET', 'POST'])
+def handle_config():
+    """处理飞书API配置的获取和保存"""
+    if request.method == 'GET':
+        try:
+            # 获取当前配置
+            config = AppConfig.get_feishu_config()
+            
+            # 为了安全，只返回配置是否已设置，而不返回具体值
+            sanitized_config = {
+                "app_id": bool(config.get("FEISHU_APP_ID")),
+                "app_secret": bool(config.get("FEISHU_APP_SECRET")),
+                "app_token": bool(config.get("FEISHU_APP_TOKEN")),
+                "table_id": bool(config.get("FEISHU_TABLE_ID")),
+                "view_id": bool(config.get("FEISHU_VIEW_ID"))
+            }
+            
+            return jsonify({
+                "code": 200, 
+                "message": "获取配置成功", 
+                "config": sanitized_config
+            })
+        except Exception as e:
+            logger.error(f"获取配置失败: {e}")
+            return jsonify({
+                "code": 500, 
+                "message": f"获取配置失败: {str(e)}"
+            }), 500
+    
+    elif request.method == 'POST':
+        try:
+            data = request.get_json()
+            if not data:
+                return jsonify({"code": 400, "message": "缺少配置数据"}), 400
+
+            # 验证必要的配置项
+            required_fields = ["app_id", "app_secret", "app_token", "table_id"]
+            for field in required_fields:
+                if not data.get(field):
+                    return jsonify({
+                        "code": 400, 
+                        "message": f"缺少必要的配置项: {field}"
+                    }), 400
+
+            # 转换为配置格式
+            config_data = {
+                "FEISHU_APP_ID": data.get("app_id"),
+                "FEISHU_APP_SECRET": data.get("app_secret"),
+                "FEISHU_APP_TOKEN": data.get("app_token"),
+                "FEISHU_TABLE_ID": data.get("table_id"),
+                "FEISHU_VIEW_ID": data.get("view_id", "")  # 可选
+            }
+            
+            # 更新配置
+            if AppConfig.update_feishu_config(config_data):
+                # 重新初始化 FeishuAPI 以应用新配置
+                global feishu_api
+                feishu_api = FeishuAPI()
+                
+                logger.info(f"飞书配置已更新: AppID: {data.get('app_id')}, TableID: {data.get('table_id')}")
+                return jsonify({"code": 200, "message": "配置保存成功"})
+            else:
+                return jsonify({"code": 500, "message": "保存配置失败，请检查日志"}), 500
+        except Exception as e:
+            logger.error(f"保存配置失败: {e}")
+            return jsonify({"code": 500, "message": f"保存配置失败: {str(e)}"}), 500
+
+@app.route('/feishu_fields', methods=['GET'])
+def get_feishu_fields():
+    """获取飞书多维表格的表头字段"""
+    try:
+        fields = feishu_api.get_table_fields() # 假设 FeishuAPI 中有这个方法
+        if fields:
+            return jsonify({"code": 200, "message": "获取表头字段成功", "fields": fields})
+        else:
+            return jsonify({"code": 404, "message": "未能获取表头字段，请检查配置或API权限"}), 404
+    except Exception as e:
+        logger.error(f"获取表头字段失败: {e}")
+        return jsonify({"code": 500, "message": f"获取表头字段失败: {str(e)}"}), 500
+
 
 if __name__ == '__main__':
     # 确保日志目录存在

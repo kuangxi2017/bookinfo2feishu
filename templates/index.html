@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISBN 同步到飞书</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>图书信息同步</h1>
+            <button id="config-btn" class="config-button">⚙️ 配置</button>
+        </header>
+        <main>
+            <div class="isbn-input-container">
+                <input type="text" id="isbn-input" placeholder="输入图书 ISBN">
+                <button id="submit-isbn-btn">获取信息并同步</button>
+            </div>
+            <div id="message-area"></div>
+            <div id="book-info-area"></div>
+        </main>
+    </div>
+
+    <div id="config-drawer" class="drawer">
+        <div class="drawer-header">
+            <h2>飞书 API 配置</h2>
+            <button id="close-drawer-btn" class="close-button">&times;</button>
+        </div>
+        <div class="drawer-content">
+            <div class="form-group">
+                <label for="app-id">App ID:</label>
+                <input type="text" id="app-id" name="app_id">
+            </div>
+            <div class="form-group">
+                <label for="app-secret">App Secret:</label>
+                <input type="password" id="app-secret" name="app_secret">
+            </div>
+            <div class="form-group">
+                <label for="table-id">Table ID:</label>
+                <input type="text" id="table-id" name="table_id">
+            </div>
+            <button id="save-config-btn">保存配置</button>
+            <hr>
+            <h3>多维表格字段</h3>
+            <button id="fetch-fields-btn">获取表头字段</button>
+            <div id="fields-mapping-area">
+                <!-- 字段映射将显示在这里 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

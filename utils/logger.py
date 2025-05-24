@@ -3,11 +3,12 @@
 
 import logging
 import os
-from config import AppConfig
 
 # 配置日志
 def setup_logger():
     """设置并返回日志记录器"""
+    from app_config import AppConfig  # 从新的app_config模块导入
+    
     # 创建日志记录器
     logger = logging.getLogger('bookinfo2feishu')
     logger.setLevel(logging.INFO)

@@ -1,33 +1,262 @@
 # -*- coding: UTF-8 -*-
-# 配置文件
+"""
+配置文件
+包含应用所需的各种配置参数，如API密钥、URL、超时设置等
+"""
 import os
+import json
+from typing import Dict, Any, Optional
+from utils.logger import logger
+from app_config import AppConfig
+
 
 class FeishuConfig:
-    """飞书API配置"""
-    # 飞书API凭证
-    APP_SECRET = 'xK98NNReR2YqwO7V62jRidlt41qzqGz0'  # 飞书后台应用token
-    APP_ID = 'cli_a246770639f8900c'                  # 飞书后台应用的id
-    APP_TOKEN = 'NzmMbjG8Ga9W76spBrzc6DfKnhb'         # 飞书多维表格的id
-    TABLE_ID = 'tblQp2OQgxamLR3x'                    # 飞书多维表格书库的表格id
+    """
+    飞书API配置
     
-    # 飞书API URL
-    TOKEN_URL = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"    # 飞书获取token的url
-    UPLOAD_URL = "https://open.feishu.cn/open-apis/drive/v1/medias/upload_all"    # 飞书上传图片的url
-    BASE_URL = "https://open.feishu.cn/open-apis/bitable/v1/apps/"     # 飞书多维表格应用的url
+    包含与飞书API交互所需的所有配置参数，如应用凭证、API端点等
+    支持从配置文件加载和保存配置
+    """
+    # 配置文件路径
+    CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config', 'feishu_config.json')
+    
+    # 默认配置
+    _DEFAULT_CONFIG = {
+        "FEISHU_APP_SECRET": "",  # 飞书后台应用密钥
+        "FEISHU_APP_ID": "",      # 飞书后台应用ID
+        "FEISHU_APP_TOKEN": "",   # 飞书多维表格应用ID
+        "FEISHU_TABLE_ID": "",    # 飞书多维表格书库的表格ID
+        "FEISHU_VIEW_ID": "",     # 飞书多维表格视图ID（可选）
+    }
+    
+    # 飞书API基础URL（固定值）
+    FEISHU_API_BASE_URL = "https://open.feishu.cn/open-apis"
+    
+    # 请求超时设置（秒）
+    REQUEST_TIMEOUT = 30
+    
+    # 当前配置
+    _config = None
+    
+    @classmethod
+    def load_config(cls) -> None:
+        """
+        从配置文件加载配置
+        如果配置文件不存在，创建默认配置文件
+        """
+        try:
+            # 确保配置目录存在
+            os.makedirs(os.path.dirname(cls.CONFIG_FILE), exist_ok=True)
+            
+            # 如果配置文件存在，读取配置
+            if os.path.exists(cls.CONFIG_FILE):
+                with open(cls.CONFIG_FILE, 'r', encoding='utf-8') as f:
+                    cls._config = json.load(f)
+                    logger.info("已从文件加载飞书配置")
+            else:
+                # 创建默认配置文件
+                cls._config = cls._DEFAULT_CONFIG.copy()
+                cls.save_config()
+                logger.info("已创建默认飞书配置文件")
+        except Exception as e:
+            logger.error(f"加载飞书配置失败: {e}")
+            cls._config = cls._DEFAULT_CONFIG.copy()
+    
+    @classmethod
+    def save_config(cls) -> bool:
+        """
+        保存配置到文件
+        
+        Returns:
+            bool: 保存是否成功
+        """
+        try:
+            os.makedirs(os.path.dirname(cls.CONFIG_FILE), exist_ok=True)
+            with open(cls.CONFIG_FILE, 'w', encoding='utf-8') as f:
+                json.dump(cls._config, f, indent=2, ensure_ascii=False)
+            logger.info("已保存飞书配置到文件")
+            return True
+        except Exception as e:
+            logger.error(f"保存飞书配置失败: {e}")
+            return False
+    
+    @classmethod
+    def update_config(cls, new_config: Dict[str, Any]) -> bool:
+        """
+        更新配置
+        
+        Args:
+            new_config: 新的配置字典
+            
+        Returns:
+            bool: 更新是否成功
+        """
+        try:
+            # 确保配置已加载
+            if cls._config is None:
+                cls.load_config()
+            
+            # 更新配置
+            for key, value in new_config.items():
+                if key in cls._DEFAULT_CONFIG:
+                    cls._config[key] = value
+            
+            # 保存到文件
+            return cls.save_config()
+        except Exception as e:
+            logger.error(f"更新飞书配置失败: {e}")
+            return False
+    
+    @classmethod
+    def get_config(cls) -> Dict[str, Any]:
+        """
+        获取当前配置
+        
+        Returns:
+            Dict[str, Any]: 包含所有飞书配置的字典
+        """
+        # 确保配置已加载
+        if cls._config is None:
+            cls.load_config()
+        
+        return {
+            **cls._config,
+            "FEISHU_API_BASE_URL": cls.FEISHU_API_BASE_URL,
+            "REQUEST_TIMEOUT": cls.REQUEST_TIMEOUT
+        }
+    
+    @classmethod
+    def get_config_value(cls, key: str) -> Optional[str]:
+        """
+        获取指定配置项的值
+        
+        Args:
+            key: 配置项名称
+            
+        Returns:
+            Optional[str]: 配置项的值，如果不存在返回None
+        """
+        if cls._config is None:
+            cls.load_config()
+        return cls._config.get(key)
 
 class DoubanConfig:
-    """豆瓣爬虫配置"""
-    USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    BASE_URL = "https://douban.com/isbn/"
-    REQUEST_TIMEOUT = 10  # 请求超时时间（秒）
+    """
+    豆瓣爬虫配置
+    
+    包含与豆瓣网站交互所需的配置参数，如User-Agent、API端点等
+    """
+    # 请求头配置
+    USER_AGENT: str = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    
+    # API端点
+    BASE_URL: str = "https://douban.com/isbn/"
+    
+    # 请求设置
+    REQUEST_TIMEOUT: int = 10  # 请求超时时间（秒）
+    MAX_RETRIES: int = 3      # 最大重试次数
+    RETRY_DELAY: int = 2      # 重试间隔（秒）
 
 class AppConfig:
-    """应用配置"""
-    HOST = '0.0.0.0'
-    PORT = 80
-    DEBUG = False
-    THREADED = True
+    """
+    应用全局配置
+    
+    包含应用特定的配置项，并提供访问FeishuConfig的方法
+    """
+    # 服务器配置
+    HOST: str = '0.0.0.0'
+    PORT: int = 80
+    DEBUG: bool = True
     
     # 日志配置
-    LOG_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs')
-    LOG_FILE = os.path.join(LOG_DIR, 'app.log')
+    LOG_DIR: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    LOG_FILE: str = os.path.join(LOG_DIR, 'app.log')
+    LOG_LEVEL: str = 'INFO'
+    LOG_FORMAT: str = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    LOG_DATE_FORMAT: str = '%Y-%m-%d %H:%M:%S'
+    
+    # 缓存配置
+    CACHE_DIR: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache')
+    CACHE_TIMEOUT: int = 3600  # 缓存过期时间（秒）
+    
+    # 配置目录
+    CONFIG_DIR: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config')
+    
+    @classmethod
+    def ensure_directories(cls) -> None:
+        """
+        确保所需的目录存在
+        创建日志、缓存和配置目录（如果不存在）
+        """
+        os.makedirs(cls.LOG_DIR, exist_ok=True)
+        os.makedirs(cls.CACHE_DIR, exist_ok=True)
+        os.makedirs(cls.CONFIG_DIR, exist_ok=True)
+    
+    @classmethod
+    def initialize(cls) -> None:
+        """
+        初始化应用配置
+        加载飞书配置并确保目录存在
+        """
+        cls.ensure_directories()
+        FeishuConfig.load_config()
+    
+    # 飞书配置代理方法
+    @classmethod
+    def get_feishu_config(cls) -> Dict[str, Any]:
+        """
+        获取飞书配置
+        
+        Returns:
+            Dict[str, Any]: 飞书配置字典
+        """
+        return FeishuConfig.get_config()
+    
+    @classmethod
+    def update_feishu_config(cls, new_config: Dict[str, Any]) -> bool:
+        """
+        更新飞书配置
+        
+        Args:
+            new_config: 新的飞书配置
+            
+        Returns:
+            bool: 更新是否成功
+        """
+        return FeishuConfig.update_config(new_config)
+    
+    # 飞书配置属性代理
+    @classmethod
+    def get_feishu_app_id(cls) -> str:
+        """获取飞书应用ID"""
+        return FeishuConfig.get_config_value("FEISHU_APP_ID") or ""
+    
+    @classmethod
+    def get_feishu_app_secret(cls) -> str:
+        """获取飞书应用密钥"""
+        return FeishuConfig.get_config_value("FEISHU_APP_SECRET") or ""
+    
+    @classmethod
+    def get_feishu_app_token(cls) -> str:
+        """获取飞书应用Token"""
+        return FeishuConfig.get_config_value("FEISHU_APP_TOKEN") or ""
+    
+    @classmethod
+    def get_feishu_table_id(cls) -> str:
+        """获取飞书表格ID"""
+        return FeishuConfig.get_config_value("FEISHU_TABLE_ID") or ""
+    
+    @classmethod
+    def get_feishu_view_id(cls) -> str:
+        """获取飞书视图ID"""
+        return FeishuConfig.get_config_value("FEISHU_VIEW_ID") or ""
+    
+    @classmethod
+    def get_feishu_api_base_url(cls) -> str:
+        """获取飞书API基础URL"""
+        return FeishuConfig.FEISHU_API_BASE_URL
+    
+    @classmethod
+    def get_request_timeout(cls) -> int:
+        """获取请求超时设置"""
+        return FeishuConfig.REQUEST_TIMEOUT
