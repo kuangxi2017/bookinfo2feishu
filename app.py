@@ -24,94 +24,102 @@ AppConfig.initialize()
 douban_scraper = DoubanScraper()
 feishu_api = FeishuAPI()
 
+def _prepare_feishu_book_data(book_info: dict, image_token: Optional[str] = None) -> Dict[str, Any]:
+    """
+    根据豆瓣图书信息和可选的图片token准备飞书API所需的数据格式。
+    """
+    fields_data: Dict[str, Any] = {
+        "书名": book_info.get('book_name'),
+        "作者": book_info.get('author_name'),
+        "出版社": book_info.get('press'),
+        "页数": book_info.get('pages'),
+        "ISBN": book_info.get('ISBN'),
+        "版权方": book_info.get('brand'),
+        "豆瓣评分": book_info.get('score'),
+        "豆瓣链接": {"link": book_info.get('url')},
+    }
+
+    # 添加译者信息（如果有）
+    if book_info.get('translator'):
+        fields_data["译者"] = book_info['translator']
+    
+    # 添加封面图片（如果有 image_token）
+    if image_token:
+        fields_data["封面"] = [{"file_token": image_token}]
+        
+    return {"fields": fields_data}
+
 @app.route('/isbn', methods=['GET'])
 def process_isbn():
     """处理ISBN请求，获取图书信息并同步到飞书"""
     isbn = request.args.get('isbn')
     if not isbn:
+        logger.warning("请求缺少ISBN参数")
         return jsonify({"code": 400, "message": "缺少ISBN参数"})
     
-    # 记录请求信息
     logger.info(f"收到ISBN请求: {isbn}")
-    
-    # 查询飞书中是否已存在该图书
-    record_id = feishu_api.search_book_by_isbn(isbn)
-    if record_id:
-        logger.info(f"ISBN {isbn} 已存在于飞书多维表格中，记录ID: {record_id}，开始更新信息...")
-        # 从豆瓣获取图书信息
-        book_info = douban_scraper.get_book_info(isbn)
-        if not book_info:
-            return jsonify({"code": 404, "message": "未找到图书信息"})
 
-        # 构建飞书多维表格数据 (不更新封面)
-        fields = {
-            "fields": {
-                "书名": book_info['book_name'],
-                "作者": book_info['author_name'],
-                "出版社": book_info['press'],
-                "页数": book_info['pages'],
-                "ISBN": book_info['ISBN'],
-                "版权方": book_info['brand'],
-                "豆瓣评分": book_info['score'],
-                "豆瓣链接": {"link": book_info['url']},
-            }
-        }
-        
-        # 添加译者信息（如果有）
-        if book_info.get('translator'):
-            fields["fields"]["译者"] = book_info['translator']
-
-        # 更新图书记录
-        success = feishu_api.update_book(record_id, fields)
-        if success:
-            logger.info(f"成功更新图书: {book_info['book_name']}")
-            return jsonify({"code": 200, "message": "图书信息更新成功", "book_info": book_info})
-        else:
-            logger.error(f"更新图书失败: {book_info['book_name']}")
-            return jsonify({"code": 500, "message": "更新图书信息失败"})
-
-    
-    # 从豆瓣获取图书信息
+    # 1. 从豆瓣获取图书信息
     book_info = douban_scraper.get_book_info(isbn)
     if not book_info:
+        logger.warning(f"未找到ISBN为 {isbn} 的图书信息")
         return jsonify({"code": 404, "message": "未找到图书信息"})
-    
-    # 上传图书封面到飞书
-    if book_info.get('book_img'):
-        image_token = feishu_api.upload_image(book_info['book_img'])
-        if image_token:
-            book_info['image_token'] = image_token
-    
-    # 构建飞书多维表格数据
-    fields = {
-        "fields": {
-            "书名": book_info['book_name'],
-            "作者": book_info['author_name'],
-            "出版社": book_info['press'],
-            "版权方": book_info['brand'],
-            "页数": book_info['pages'],
-            "豆瓣评分": book_info['score'],
-            "豆瓣链接": {"link": book_info['url']},
-            "ISBN": book_info['ISBN']
-        }
-    }
-    
-    # 添加译者信息（如果有）
-    if book_info.get('translator'):
-        fields["fields"]["译者"] = book_info['translator']
-    
-    # 添加封面图片（如果有）
-    if book_info.get('image_token'):
-        fields["fields"]["封面"] = [{"file_token": book_info['image_token']}]
-    
-    # 创建图书记录
-    success = feishu_api.create_book(fields)
-    if success:
-        logger.info(f"成功添加图书: {book_info['book_name']}")
-        return jsonify({"code": 201, "message": "图书添加成功", "book_info": book_info})
+
+    # 2. 查询飞书中是否已存在该图书
+    try:
+        record_id = feishu_api.search_book_by_isbn(isbn)
+    except Exception as e:
+        logger.error(f"查询飞书记录失败 (ISBN: {isbn}): {e}")
+        return jsonify({"code": 500, "message": "查询飞书记录失败"})
+
+    if record_id:
+        # 3. 更新现有记录
+        logger.info(f"ISBN {isbn} 已存在于飞书，记录ID: {record_id}，开始更新信息...")
+        # 对于更新操作，通常不更新封面，所以不传递 image_token
+        feishu_data = _prepare_feishu_book_data(book_info) 
+        
+        try:
+            success = feishu_api.update_book(record_id, feishu_data)
+            if success:
+                logger.info(f"成功更新图书: {book_info.get('book_name')} (ISBN: {isbn})")
+                return jsonify({"code": 200, "message": "图书信息更新成功", "book_info": book_info})
+            else:
+                logger.error(f"更新飞书图书记录失败: {book_info.get('book_name')} (ISBN: {isbn})")
+                return jsonify({"code": 500, "message": "更新飞书图书记录失败"})
+        except Exception as e:
+            logger.error(f"更新飞书图书记录时发生异常 (ISBN: {isbn}): {e}")
+            return jsonify({"code": 500, "message": "更新飞书记录时发生错误"})
+
     else:
-        logger.error(f"添加图书失败: {book_info['book_name']}")
-        return jsonify({"code": 500, "message": "添加图书失败"})
+        # 4. 创建新记录
+        logger.info(f"ISBN {isbn} 在飞书中不存在，开始创建新记录...")
+        image_token = None
+        if book_info.get('book_img'):
+            try:
+                logger.info(f"开始为ISBN {isbn} 上传封面: {book_info['book_img']}")
+                image_token = feishu_api.upload_image(book_info['book_img'])
+                if image_token:
+                    logger.info(f"封面上传成功 for ISBN {isbn}, image_token: {image_token}")
+                    book_info['image_token'] = image_token # Store for response, if needed
+                else:
+                    logger.warning(f"上传封面失败或未返回image_token for ISBN {isbn}")
+            except Exception as e:
+                logger.error(f"上传封面图片失败 for ISBN {isbn}: {e}")
+                # 根据需求决定是否因封面上传失败而中止。目前选择继续，但不带封面。
+
+        feishu_data = _prepare_feishu_book_data(book_info, image_token=image_token)
+        
+        try:
+            success = feishu_api.create_book(feishu_data)
+            if success:
+                logger.info(f"成功添加图书到飞书: {book_info.get('book_name')} (ISBN: {isbn})")
+                return jsonify({"code": 201, "message": "图书添加成功", "book_info": book_info})
+            else:
+                logger.error(f"添加图书到飞书失败: {book_info.get('book_name')} (ISBN: {isbn})")
+                return jsonify({"code": 500, "message": "添加图书到飞书失败"})
+        except Exception as e:
+            logger.error(f"添加飞书图书记录时发生异常 (ISBN: {isbn}): {e}")
+            return jsonify({"code": 500, "message": "添加飞书记录时发生错误"})
 
 @app.route('/', methods=['GET'])
 def index():
@@ -189,7 +197,7 @@ def handle_config():
 def get_feishu_fields():
     """获取飞书多维表格的表头字段"""
     try:
-        fields = feishu_api.get_table_fields() # 假设 FeishuAPI 中有这个方法
+        fields = feishu_api.get_table_fields()
         if fields:
             return jsonify({"code": 200, "message": "获取表头字段成功", "fields": fields})
         else:
@@ -200,10 +208,8 @@ def get_feishu_fields():
 
 
 if __name__ == '__main__':
-    # 确保日志目录存在
-    log_dir = os.path.dirname(AppConfig.LOG_FILE)
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
+    # AppConfig.initialize() is called earlier, which ensures directories exist.
+    # No need to manually create log_dir here again.
     
     # 启动Flask应用
     app.run(

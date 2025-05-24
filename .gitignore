@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.hypothesis
+.pytest_cache/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Log and cache files from this project
+logs/
+cache/
+
+# Configuration - consider if feishu_config.json should be ignored
+# If feishu_config.json contains sensitive production keys, it's best to ignore it
+# and use a template or environment variables for configuration.
+# For now, we will include it but add a comment.
+# config/feishu_config.json
+
+# IDE specific files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace

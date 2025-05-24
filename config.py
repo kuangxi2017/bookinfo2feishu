@@ -7,7 +7,6 @@ import os
 import json
 from typing import Dict, Any, Optional
 from utils.logger import logger
-from app_config import AppConfig
 
 
 class FeishuConfig:
@@ -140,6 +139,7 @@ class FeishuConfig:
             cls.load_config()
         return cls._config.get(key)
 
+
 class DoubanConfig:
     """
     豆瓣爬虫配置
@@ -156,6 +156,7 @@ class DoubanConfig:
     REQUEST_TIMEOUT: int = 10  # 请求超时时间（秒）
     MAX_RETRIES: int = 3      # 最大重试次数
     RETRY_DELAY: int = 2      # 重试间隔（秒）
+
 
 class AppConfig:
     """
