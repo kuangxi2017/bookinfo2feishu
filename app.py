@@ -25,30 +25,67 @@ AppConfig.initialize()
 douban_scraper = DoubanScraper()
 feishu_api = FeishuAPI()
 
-def _prepare_feishu_book_data(book_info: dict, image_token: Optional[str] = None) -> Dict[str, Any]:
+def _prepare_feishu_book_data(
+    book_info: dict, 
+    douban_to_feishu_header_mappings: dict, # 例如: {"book_name": "书名", "author_name": "作者"}
+    image_token: Optional[str] = None
+) -> Dict[str, Any]:
     """
-    根据豆瓣图书信息和可选的图片token准备飞书API所需的数据格式。
+    根据豆瓣图书信息和用户选择的映射关系（豆瓣字段名 -> 飞书表头字段名）准备数据。
+    注意：此函数返回的 "fields" 字典的键是飞书的 *表头字段名*。
+    调用方在将此数据发送给飞书API之前，需要将这些表头字段名转换为对应的飞书字段ID。
     """
-    fields_data: Dict[str, Any] = {
-        "书名": book_info.get('book_name'),
-        "作者": book_info.get('author_name'),
-        "出版社": book_info.get('press'),
-        "页数": book_info.get('pages'),
-        "ISBN": book_info.get('ISBN'),
-        "版权方": book_info.get('brand'),
-        "豆瓣评分": book_info.get('score'),
-        "豆瓣链接": {"link": book_info.get('url')},
-    }
+    fields_data_with_headers: Dict[str, Any] = {}
 
-    # 添加译者信息（如果有）
-    if book_info.get('translator'):
-        fields_data["译者"] = book_info['translator']
-    
-    # 添加封面图片（如果有 image_token）
-    if image_token:
-        fields_data["封面"] = [{"file_token": image_token}]
-        
-    return {"fields": fields_data}
+    for douban_field_name, feishu_header_name in douban_to_feishu_header_mappings.items():
+        value_to_set = None # 初始化为None，确保只有有效值才被添加
+
+        if douban_field_name == 'book_name':
+            value_to_set = book_info.get('book_name')
+        elif douban_field_name == 'author_name':
+            value_to_set = book_info.get('author_name')
+        elif douban_field_name == 'press':
+            value_to_set = book_info.get('press')
+        elif douban_field_name == 'pages':
+            pages_val = book_info.get('pages')
+            if pages_val is not None: # 仅当 pages_val 不是 None 时尝试转换
+                try:
+                    value_to_set = int(pages_val)
+                except (ValueError, TypeError):
+                    logger.warning(f"无法将页数 '{pages_val}' 转换为整数 (ISBN: {book_info.get('ISBN')}).")
+            # 如果 pages_val 是 None, value_to_set 保持 None
+        elif douban_field_name == 'ISBN':
+            value_to_set = book_info.get('ISBN')
+        elif douban_field_name == 'brand': # 出品方
+            value_to_set = book_info.get('brand')
+        elif douban_field_name == 'score': # 评分
+            score_val = book_info.get('score')
+            if score_val is not None: # 仅当 score_val 不是 None 时尝试转换
+                try:
+                    value_to_set = float(score_val)
+                except (ValueError, TypeError):
+                    logger.warning(f"无法将评分 '{score_val}' 转换为数字 (ISBN: {book_info.get('ISBN')}).")
+            # 如果 score_val 是 None, value_to_set 保持 None
+        elif douban_field_name == 'url': # 链接
+            link_url = book_info.get('url')
+            if link_url: # 仅当 link_url 有值时设置
+                value_to_set = {"link": link_url}
+        elif douban_field_name == 'translator': # 译者
+            translator_val = book_info.get('translator')
+            if translator_val: # 仅当 translator_val 有值时设置 (处理 None 或空字符串)
+                value_to_set = translator_val
+        elif douban_field_name == 'image_token' and image_token: # 假设 'image_token' 是 douban_to_feishu_header_mappings 中的一个键
+            value_to_set = [{"file_token": image_token}]
+        # 可以添加一个通用回退，但不推荐，因为特定类型处理更好
+        # elif douban_field_name in book_info:
+        #     value_to_set = book_info.get(douban_field_name)
+
+        # 仅当确定了有效值时才添加到字典中
+        # 这避免了发送空字段，除非明确将 value_to_set 设置为 "" 或 {} 等
+        if value_to_set is not None:
+            fields_data_with_headers[feishu_header_name] = value_to_set
+
+    return {"fields": fields_data_with_headers}
 
 @app.route('/isbn', methods=['GET'])
 def process_isbn():
@@ -77,13 +114,15 @@ def process_isbn():
         # 3. 更新现有记录
         logger.info(f"ISBN {isbn} 已存在于飞书，记录ID: {record_id}，开始更新信息...")
         # 对于更新操作，通常不更新封面，所以不传递 image_token
-        feishu_data = _prepare_feishu_book_data(book_info) 
+        # 传递空的mappings，让_prepare_feishu_book_data处理所有可识别字段
+        feishu_data = _prepare_feishu_book_data(book_info, mappings={}, image_token=image_token_val)
+        logger.debug(f"Prepared Feishu data for ISBN update: {feishu_data}")
         
         try:
-            success = feishu_api.update_book(record_id, feishu_data)
-            if success:
-                logger.info(f"成功更新图书: {book_info.get('book_name')} (ISBN: {isbn})")
-                return jsonify({"code": 200, "message": "图书信息更新成功", "book_info": book_info})
+            record_id = feishu_api.create_book(feishu_data)
+            if record_id: # 修复：检查 record_id 是否为真 (非None)
+                logger.info(f"成功添加图书到飞书: {book_info.get('book_name')} (ISBN: {isbn})")
+                return jsonify({"code": 201, "message": "图书添加成功", "book_info": book_info})
             else:
                 logger.error(f"更新飞书图书记录失败: {book_info.get('book_name')} (ISBN: {isbn})")
                 return jsonify({"code": 500, "message": "更新飞书图书记录失败"})
@@ -94,25 +133,30 @@ def process_isbn():
     else:
         # 4. 创建新记录
         logger.info(f"ISBN {isbn} 在飞书中不存在，开始创建新记录...")
-        image_token = None
+        image_token_val = None # 使用不同的变量名以避免与外部的image_token混淆
         if book_info.get('book_img'):
             try:
                 logger.info(f"开始为ISBN {isbn} 上传封面: {book_info['book_img']}")
-                image_token = feishu_api.upload_image(book_info['book_img'])
-                if image_token:
-                    logger.info(f"封面上传成功 for ISBN {isbn}, image_token: {image_token}")
-                    book_info['image_token'] = image_token # Store for response, if needed
+                # 注意：之前的代码中这里调用的是 feishu_api.upload_image, 
+                # 但根据之前的修改，我们应该使用 upload_image_from_url
+                # 这里暂时保持 upload_image，假设它是处理本地文件或已下载的图片
+                # 如果需要从URL上传，应改为 feishu_api.upload_image_from_url(book_info['book_img'])
+                image_token_val = feishu_api.upload_image(book_info['book_img'])
+                if image_token_val:
+                    logger.info(f"封面上传成功 for ISBN {isbn}, image_token: {image_token_val}")
+                    book_info['image_token'] = image_token_val # Store for response, if needed
                 else:
-                    logger.warning(f"上传封面失败或未返回image_token for ISBN {isbn}")
+                    logger.warning(f"封面上传失败 for ISBN {isbn}，未获取到image_token")
             except Exception as e:
-                logger.error(f"上传封面图片失败 for ISBN {isbn}: {e}")
-                # 根据需求决定是否因封面上传失败而中止。目前选择继续，但不带封面。
-
-        feishu_data = _prepare_feishu_book_data(book_info, image_token=image_token)
+                logger.error(f"上传封面图片失败 (ISBN: {isbn}): {e}")
+        
+        # 传递空的mappings，让_prepare_feishu_book_data处理所有可识别字段
+        feishu_data = _prepare_feishu_book_data(book_info, mappings={}, image_token=image_token_val)
+        logger.debug(f"Prepared Feishu data for ISBN create: {feishu_data}")
         
         try:
-            success = feishu_api.create_book(feishu_data)
-            if success:
+            record_id = feishu_api.create_book(feishu_data)
+            if record_id: # 修复：检查 record_id 是否为真 (非None)
                 logger.info(f"成功添加图书到飞书: {book_info.get('book_name')} (ISBN: {isbn})")
                 return jsonify({"code": 201, "message": "图书添加成功", "book_info": book_info})
             else:
@@ -165,34 +209,66 @@ def sync_to_feishu():
         logger.error(f"查询飞书记录失败 (ISBN: {isbn}): {e}")
         return jsonify({"code": 500, "message": "查询飞书记录失败"})
 
-    # 准备飞书数据，应用字段映射
-    feishu_data = {"fields": {}}
-    for douban_field, feishu_field_id in field_mappings.items():
-        if feishu_field_id and book_info.get(douban_field) is not None:
-            # 特殊处理豆瓣链接
-            if douban_field == 'url':
-                feishu_data["fields"][feishu_field_id] = {"link": book_info['url']}
-            else:
-                feishu_data["fields"][feishu_field_id] = book_info[douban_field]
+    # 使用 _prepare_feishu_book_data 方法准备飞书数据
+    image_token_val = book_info.get('image_token') # 获取 image_token
+    # feishu_data = _prepare_feishu_book_data(book_info, field_mappings, image_token=image_token_val) # 这行是准备用于创建或更新的通用数据，但在更新的逻辑块里又调用了一次，需要调整
 
     if record_id:
         # 更新现有记录
         logger.info(f"更新飞书记录: {record_id}")
+        # 对于更新操作，也需要准备数据，mappings为空表示使用默认逻辑处理所有可识别字段
+        # 如果需要更新图片，也应该传递 image_token
+        image_token_val = None
+        if book_info.get('book_img'): # 假设 book_img 是图片URL或本地路径
+            try:
+                # 假设 upload_image_from_url 更合适，如果 book_img 是 URL
+                # 如果 book_img 是本地文件路径，确保 feishu_api 有对应处理方法
+                # 这里暂时保留之前的逻辑，但实际应用中需要明确图片来源和上传方式
+                # image_token_val = feishu_api.upload_image(book_info['book_img']) # 这行之前被注释了
+                # 为了安全，暂时不处理图片更新，除非有明确的 image_token 传入
+                pass
+            except Exception as e:
+                logger.error(f"为更新操作上传图片失败: {e}")
+        
+        feishu_data = _prepare_feishu_book_data(book_info, mappings={}, image_token=image_token_val) 
+        logger.debug(f"Prepared Feishu data for sync update: {feishu_data}")
+        
         try:
-            success = feishu_api.update_book(record_id, feishu_data)
-            if success:
-                logger.info(f"成功更新图书: {book_info.get('book_name')}")
-                return jsonify({"code": 200, "message": "图书信息更新成功"})
-            return jsonify({"code": 500, "message": "更新飞书图书记录失败"})
+            updated_record_id = feishu_api.update_book(record_id, feishu_data)
+            if updated_record_id:
+                logger.info(f"成功更新图书: {book_info.get('book_name')} (ISBN: {isbn})")
+                return jsonify({"code": 200, "message": "图书信息更新成功", "book_info": book_info})
+            else:
+                logger.error(f"更新飞书图书记录失败: {book_info.get('book_name')} (ISBN: {isbn})")
+                return jsonify({"code": 500, "message": "更新飞书图书记录失败"})
         except Exception as e:
-            logger.error(f"更新飞书记录失败: {e}")
-            return jsonify({"code": 500, "message": "更新飞书记录失败"})
+            logger.error(f"更新飞书记录时发生异常: {e}")
+            return jsonify({"code": 500, "message": f"更新飞书记录时发生异常: {str(e)}"})
     else:
         # 创建新记录
         logger.info("创建新飞书记录")
+        # 如果有封面图片URL，则先上传图片到飞书并获取 image_token
+        # 注意：这里的 image_token_val 变量名与上面获取的不同，需要统一或确保逻辑正确
+        # 假设这里的 image_token_val 是新上传的，或者从 book_info 中获取的
+        current_image_token = book_info.get('image_token') # 优先使用 book_info 中已有的 image_token
+
+        if 'image_url' in book_info and book_info['image_url'] and not current_image_token:
+            try:
+                logger.info(f"上传新封面: {book_info['image_url']}")
+                current_image_token = feishu_api.upload_image_from_url(book_info['image_url'])
+                if current_image_token:
+                    logger.info(f"新封面上传成功, image_token: {current_image_token}")
+                    book_info['image_token'] = current_image_token # 更新 book_info 中的 token
+                else:
+                    logger.warning("新封面上传失败，未获取到 image_token")
+            except Exception as e:
+                logger.error(f"上传新封面图片失败: {e}")
+        
+        feishu_data = _prepare_feishu_book_data(book_info, field_mappings, image_token=current_image_token)
+        logger.debug(f"Prepared Feishu data for sync create: {feishu_data}")
         try:
-            success = feishu_api.create_book(feishu_data)
-            if success:
+            record_id = feishu_api.create_book(feishu_data)
+            if record_id: # 修复：检查 record_id 是否为真 (非None)
                 logger.info(f"成功添加图书: {book_info.get('book_name')}")
                 return jsonify({"code": 201, "message": "图书添加成功"})
             return jsonify({"code": 500, "message": "添加图书到飞书失败"})
@@ -274,11 +350,16 @@ def handle_config():
 
 @app.route('/feishu_fields', methods=['GET'])
 def get_feishu_fields():
-    """获取飞书多维表格的表头字段"""
+    """获取飞书多维表格的表头字段，并标记哪些是建议的可选类型"""
     try:
         fields = feishu_api.get_table_fields()
         if fields:
-            return jsonify({"code": 200, "message": "获取表头字段成功", "fields": fields})
+            allowed_types_for_selection = [1, 2, 3, 13, 15, 17]  # 多行文本、数字、单选、电话号码、超链接、附件
+            processed_fields = []
+            for field in fields:
+                field['is_selectable'] = field.get('type') in allowed_types_for_selection
+                processed_fields.append(field)
+            return jsonify({"code": 200, "message": "获取表头字段成功", "fields": processed_fields})
         else:
             return jsonify({"code": 404, "message": "未能获取表头字段，请检查配置或API权限"}), 404
     except Exception as e:

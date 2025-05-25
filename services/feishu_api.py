@@ -22,20 +22,33 @@ class FeishuAPI:
     TOKEN_EXPIRE_BUFFER: int = 6600  # 1小时50分钟，确保在2小时过期前刷新
     
     # 飞书字段类型映射
+    # 飞书字段类型映射表 - 根据官方文档更新
     FIELD_TYPE_MAP: Dict[int, str] = {
-        1: "文本",
-        2: "数字",
+        1: "多行文本",  # 包含多行文本、条码、Email
+        2: "数字",      # 包含数字、进度、货币、评分
         3: "单选",
         4: "多选",
         5: "日期",
         7: "复选框",
-        11: "创建时间",
-        12: "最后更新时间",
-        15: "附件",
-        17: "人员",
-        18: "链接",
+        11: "人员",
+        13: "电话号码",
+        15: "超链接",
+        17: "附件",
+        18: "单向关联",
+        19: "查找引用",
+        20: "公式",
+        21: "双向关联",
+        22: "地理位置",
+        23: "群组",
+        24: "流程",
+        1001: "创建时间",
+        1002: "最后更新时间",
+        1003: "创建人",
+        1004: "修改人",
+        1005: "自动编号",
+        3001: "按钮",
     }
-
+    
     def __init__(self) -> None:
         """
         Initializes the FeishuAPI client.
@@ -250,109 +263,87 @@ class FeishuAPI:
             "Content-Type": "application/json; charset=utf-8"
         }
     
-    def upload_image(self, image_url: str) -> Optional[str]:
+    def upload_image_from_url(self, image_url: str, file_name: str = "cover.jpg") -> Optional[str]:
         """
-        Downloads an image from a given URL, uploads it to Feishu Drive (specifically for bitable use),
-        and returns the file token.
-
+        从指定的URL下载图片，并将其上传到飞书云空间。
+    
         Args:
-            image_url (str): The URL of the image to download and upload.
-
+            image_url: 图片的URL。
+            file_name: 上传到飞书时使用的文件名。
+    
         Returns:
-            Optional[str]: The file token for the uploaded image if successful, otherwise None.
-        
-        Raises:
-            requests.exceptions.RequestException: For network issues during image download or upload.
+            Optional[str]: 上传成功则返回 file_token，否则返回 None。
         """
-        if not self.app_token:
-            logger.error("Cannot upload image: Feishu App Token (for bitable) is not configured.")
+        token = self.get_token()
+        if not token:
+            logger.error("无法上传图片：获取tenant_access_token失败")
             return None
-
-        fp_name: Optional[str] = None # To store temp file path for cleanup
+    
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+    
         try:
-            logger.info(f"Starting image download from: {image_url}")
-            image_response = requests.get(image_url, timeout=self.request_timeout, stream=True)
-            image_response.raise_for_status()
+            # 下载图片
+            response_image = requests.get(image_url, timeout=self.request_timeout, stream=True)
+            response_image.raise_for_status()
+    
+            # 使用临时文件保存图片内容
+            with tempfile.NamedTemporaryFile(delete=False, suffix=f"_{file_name}") as tmp_file:
+                for chunk in response_image.iter_content(chunk_size=8192):
+                    tmp_file.write(chunk)
+                tmp_file_path = tmp_file.name
             
-            # Using NamedTemporaryFile with delete=False to ensure it can be opened by path later
-            with tempfile.NamedTemporaryFile(delete=False) as fp:
-                fp_name = fp.name # Store the name for cleanup
-                for chunk in image_response.iter_content(chunk_size=8192):
-                    fp.write(chunk)
-                file_size = fp.tell()
-            
-            logger.info(f"Image downloaded to temporary file: {fp_name}, size: {file_size} bytes.")
-
-            token = self.get_token()
-            if not token:
-                logger.error("Cannot upload image: Failed to acquire access token.")
-                return None
-            
-            file_name = image_url.split("/")[-1] or "untitled_image"
-            # Ensure content_type is reasonable, default to jpeg if not available
-            content_type = image_response.headers.get('Content-Type', 'image/jpeg')
-            
+            logger.info(f"图片已下载到临时文件: {tmp_file_path}")
+    
+            # 准备上传参数
             form_data = {
-                "file_name": file_name,
-                "parent_type": "bitable_image", # Critical for use in bitable attachments
-                "parent_node": self.app_token,  # app_token of the bitable
-                "size": str(file_size),
-                # file field: (filename, file_object, content_type)
-                "file": (file_name, open(fp_name, 'rb'), content_type) 
+                'file_name': file_name,
+                'parent_type': 'bitable_image',
+                'parent_node': self.app_token, # 使用多维表格的 app_token 作为 parent_node
+                'size': str(os.path.getsize(tmp_file_path)),
+                'file': (file_name, open(tmp_file_path, 'rb'), 'image/jpeg') # 假设是jpeg格式
             }
             
-            multi_form = MultipartEncoder(fields=form_data)
-            upload_headers = {
-                "Authorization": f"Bearer {token}",
-                "Content-Type": multi_form.content_type
-            }
-            
-            logger.info(f"Uploading image '{file_name}' to Feishu Drive.")
-            response = requests.post(
-                self.upload_url,
-                data=multi_form,
-                headers=upload_headers,
+            multipart_encoder = MultipartEncoder(fields=form_data)
+            headers['Content-Type'] = multipart_encoder.content_type
+    
+            # 上传图片
+            upload_response = requests.post(
+                self.upload_url, 
+                headers=headers, 
+                data=multipart_encoder, 
                 timeout=self.request_timeout
             )
-            response.raise_for_status()
-            
-            result = response.json()
-            # Close the file explicitly after requests.post is done with it
-            form_data['file'][1].close()
-
-            if result.get('code') == 0 and result.get('data') and result['data'].get('file_token'):
-                file_token = result['data']['file_token']
-                logger.info(f"Successfully uploaded image '{file_name}', file_token: {file_token}")
+            upload_response.raise_for_status()
+            result = upload_response.json()
+    
+            if result.get("code") == 0 and result.get("data") and result["data"].get("file_token"):
+                file_token = result["data"]["file_token"]
+                logger.info(f"图片上传成功，file_token: {file_token}")
                 return file_token
             else:
-                logger.error(f"Failed to upload image. API Error Code: {result.get('code')}, Message: {result.get('msg')}")
+                logger.error(f"飞书API上传图片失败: {result}")
                 return None
-                
+    
         except requests.exceptions.RequestException as e:
-            logger.error(f"Request exception during image download or upload for {image_url}: {e}")
-            if 'form_data' in locals() and form_data['file'][1] and not form_data['file'][1].closed:
-                form_data['file'][1].close() # Ensure file is closed on error
-            raise
-        except IOError as e: # Catch file operation errors
-            logger.error(f"IOError during image processing for {image_url}: {e}")
-            if 'form_data' in locals() and form_data['file'][1] and not form_data['file'][1].closed:
-                form_data['file'][1].close()
+            logger.error(f"上传图片到飞书时发生网络或HTTP错误: {e}")
+            return None
+        except IOError as e:
+            logger.error(f"处理图片文件时发生IO错误: {e}")
             return None
         except Exception as e:
-            logger.error(f"An unexpected error occurred during image upload for {image_url}: {e}")
-            if 'form_data' in locals() and form_data['file'][1] and not form_data['file'][1].closed:
-                form_data['file'][1].close()
-            return None # Or re-raise
+            logger.error(f"上传图片过程中发生未知错误: {e}")
+            return None
         finally:
-            if fp_name:
+            # 清理临时文件
+            if 'tmp_file_path' in locals() and os.path.exists(tmp_file_path):
                 try:
-                    import os
-                    if os.path.exists(fp_name):
-                        os.unlink(fp_name)
-                        logger.debug(f"Successfully cleaned up temporary file: {fp_name}")
-                except Exception as e:
-                    logger.warning(f"Failed to clean up temporary file {fp_name}: {e}")
-    
+                    os.remove(tmp_file_path)
+                    logger.info(f"临时文件已删除: {tmp_file_path}")
+                except OSError as e:
+                    logger.error(f"删除临时文件失败: {tmp_file_path}, Error: {e}")
+
     def search_book_by_isbn(self, isbn: str) -> Optional[str]:
         """
         Searches for a book record in the Feishu table by its ISBN.

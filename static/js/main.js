@@ -128,10 +128,22 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = `<h3>${book.book_name}</h3>`;
         let fieldsHtml = '';
         
-        // 显示书籍信息
-        for (const key in book) {
-            if (book.hasOwnProperty(key) && key !== 'book_name' && key !== 'image_token') {
-                html += `<p><strong>${translateKey(key)}:</strong> ${book[key]}</p>`;
+        // 创建一个包含所有要显示和映射的字段的键列表
+        // 首先添加 'book_name'，然后添加 book 对象中除了 'book_name' 和 'image_token' 之外的其他所有键
+        const keysToDisplayAndMap = ['book_name', ...Object.keys(book).filter(k => k !== 'book_name' && k !== 'image_token')];
+
+        for (const key of keysToDisplayAndMap) {
+            // 确保我们只处理 book 对象中实际存在的属性，或者我们特意添加的 'book_name'
+            if (book.hasOwnProperty(key) || key === 'book_name') {
+                const value = book[key];
+
+                // 对于非书名信息，添加到 <p> 标签中显示
+                // 书名已经通过 <h3> 显示，所以这里跳过
+                if (key !== 'book_name') {
+                    html += `<p><strong>${translateKey(key)}:</strong> ${value}</p>`;
+                }
+
+                // 为所有字段（包括书名）创建映射条目
                 fieldsHtml += `<div class="field-mapping">
                     <span>${translateKey(key)}</span>
                     <select id="map-${key}" class="field-select">
@@ -223,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function translateKey(key) {
         const map = {
+            book_name: '书名',
             author_name: '作者',
             press: '出版社',
             publish_date: '出版日期',
@@ -288,6 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         option.value = field.field_id;
                         // 修改此处，显示字段名称和类型
                         option.textContent = `${field.name} (${field.type_name})`;
+                        // 根据 is_selectable 属性设置 option 是否可选
+                        if (field.is_selectable === false) { // 明确检查 false，因为 undefined 或 true 都应可选
+                            option.disabled = true;
+                            option.textContent += ' (不支持的类型)'; // 可选：添加提示
+                        }
                         select.appendChild(option);
                     });
                     
@@ -297,6 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         select.value = savedMappings[select.id.replace('map-', '')];
                     }
                 });
+            } else {
+                showMessage(data.message || '加载飞书字段选项失败', 'error');
             }
         } catch (error) {
             console.error('加载飞书字段失败:', error);
