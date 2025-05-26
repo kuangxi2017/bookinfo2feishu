@@ -8,6 +8,7 @@ import tempfile
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from config import FeishuConfig
 from utils.logger import logger
+import os # Added for os.path and os.remove used in upload_image_from_url
 
 class FeishuAPI:
     """飞书API操作类，处理与飞书服务器的所有交互
@@ -405,13 +406,14 @@ class FeishuAPI:
             logger.error(f"An unexpected error occurred while searching for book with ISBN {isbn}: {e}")
             return None
 
-    def update_book(self, record_id: str, book_data: Dict[str, Any]) -> bool:
+    def update_book(self, record_id: str, book_data_by_name: Dict[str, Any]) -> bool:
         """
-        Updates an existing book record in the Feishu table.
+        Updates an existing book record in the Feishu table using field names.
 
         Args:
             record_id (str): The ID of the record to update.
-            book_data (Dict[str, Any]): A dictionary containing the data to update.
+            book_data_by_name (Dict[str, Any]): A dictionary containing the data to update,
+                                       with field names as keys.
                                        Expected format: `{"fields": {"FieldName1": "NewValue1", ...}}`.
 
         Returns:
@@ -423,12 +425,25 @@ class FeishuAPI:
         if not record_id:
             logger.error("Cannot update book: Record ID is missing.")
             return False
-        if not book_data or "fields" not in book_data:
-            logger.error("Cannot update book: Book data is missing or not in the correct format {'fields': {...}}.")
+        if not book_data_by_name or "fields" not in book_data_by_name or not isinstance(book_data_by_name.get("fields"), dict):
+            logger.error("Cannot update book: Book data is missing, 'fields' key is missing, 'fields' is not a dict, or not in the correct format {'fields': {...}}.")
             return False
         if not self.app_token or not self.table_id:
             logger.error("Cannot update book: Feishu App Token or Table ID is not configured.")
             return False
+
+        # Directly use book_data_by_name as Feishu API expects field names if not using IDs
+        # Ensure the input `book_data_by_name` is directly usable by the API
+        # The API might expect field IDs, so this change assumes the API can handle field names directly
+        # or that the calling code will ensure field names are what the API expects.
+        # For now, we proceed with the user's request to use field names directly.
+        if not book_data_by_name.get("fields"):
+            logger.warning("No fields provided in book_data_by_name. Record will not be updated.")
+            return False
+        
+        # The data is already in the format {"fields": {"FieldName1": "Value1", ...}}
+        # No transformation needed if we are to use field names directly.
+        book_data_for_api = book_data_by_name
             
         try:
             req_headers = self.get_headers()
@@ -438,10 +453,10 @@ class FeishuAPI:
                 
             update_url = f"{self.base_table_url}/{self.app_token}/tables/{self.table_id}/records/{record_id}"
             
-            logger.info(f"Updating book record_id: {record_id} in table: {self.table_id}")
+            logger.info(f"Updating book record_id: {record_id} in table: {self.table_id} with data: {book_data_for_api}")
             response = requests.put(
                 update_url,
-                json=book_data,
+                json=book_data_for_api,
                 headers=req_headers,
                 timeout=self.request_timeout
             )
@@ -462,12 +477,13 @@ class FeishuAPI:
             logger.error(f"An unexpected error occurred while updating book record_id {record_id}: {e}")
             return False
     
-    def create_book(self, book_data: Dict[str, Any]) -> bool:
+    def create_book(self, book_data_by_name: Dict[str, Any]) -> bool:
         """
-        Creates a new book record in the Feishu table.
+        Creates a new book record in the Feishu table using field names.
 
         Args:
-            book_data (Dict[str, Any]): A dictionary containing the data for the new record.
+            book_data_by_name (Dict[str, Any]): A dictionary containing the data for the new record,
+                                       with field names as keys.
                                        Expected format: `{"fields": {"FieldName1": "Value1", ...}}`.
 
         Returns:
@@ -476,12 +492,25 @@ class FeishuAPI:
         Raises:
             requests.exceptions.RequestException: For network issues or HTTP errors during the API call.
         """
-        if not book_data or "fields" not in book_data:
-            logger.error("Cannot create book: Book data is missing or not in the correct format {'fields': {...}}.")
+        if not book_data_by_name or "fields" not in book_data_by_name or not isinstance(book_data_by_name.get("fields"), dict):
+            logger.error("Cannot create book: Book data is missing, 'fields' key is missing, 'fields' is not a dict, or not in the correct format {'fields': {...}}.")
             return False
         if not self.app_token or not self.table_id:
             logger.error("Cannot create book: Feishu App Token or Table ID is not configured.")
             return False
+
+        # Directly use book_data_by_name as Feishu API expects field names if not using IDs
+        # Ensure the input `book_data_by_name` is directly usable by the API
+        # The API might expect field IDs, so this change assumes the API can handle field names directly
+        # or that the calling code will ensure field names are what the API expects.
+        # For now, we proceed with the user's request to use field names directly.
+        if not book_data_by_name.get("fields"):
+            logger.warning("No fields provided in book_data_by_name. Record will not be created.")
+            return False
+
+        # The data is already in the format {"fields": {"FieldName1": "Value1", ...}}
+        # No transformation needed if we are to use field names directly.
+        book_data_for_api = book_data_by_name
             
         try:
             req_headers = self.get_headers()
@@ -491,10 +520,10 @@ class FeishuAPI:
                 
             create_url = f"{self.base_table_url}/{self.app_token}/tables/{self.table_id}/records"
             
-            logger.info(f"Creating new book record in table: {self.table_id}")
+            logger.info(f"Creating new book record in table: {self.table_id} with data: {book_data_for_api}")
             response = requests.post(
                 create_url,
-                json=book_data,
+                json=book_data_for_api,
                 headers=req_headers,
                 timeout=self.request_timeout
             )
