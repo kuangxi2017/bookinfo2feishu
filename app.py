@@ -25,11 +25,7 @@ AppConfig.initialize()
 douban_scraper = DoubanScraper()
 feishu_api = FeishuAPI()
 
-def _prepare_feishu_book_data(
-    book_info: dict, 
-    douban_to_feishu_header_mappings: dict, # 例如: {"book_name": "书名", "author_name": "作者"}
-    image_token: Optional[str] = None
-) -> Dict[str, Any]:
+def _prepare_feishu_book_data(book_info: dict, douban_to_feishu_header_mappings: dict, image_token: Optional[str] = None) -> Dict[str, Any]:
     """
     根据豆瓣图书信息和用户选择的映射关系（豆瓣字段名 -> 飞书表头字段名或字段ID）准备数据。
     此函数返回的 "fields" 字典的键始终是飞书的 *表头字段名*。
@@ -57,89 +53,76 @@ def _prepare_feishu_book_data(
         value_to_set = None # 初始化为None，确保只有有效值才被添加
         logger.debug(f"处理豆瓣字段: {douban_field_name} -> 飞书键(来自映射): {feishu_key_from_mapping}")
 
-        if douban_field_name == 'book_name':
-            value_to_set = book_info.get('book_name')
-            logger.debug(f"书名字段值: {value_to_set}")
-        elif douban_field_name == 'author_name':
-            value_to_set = book_info.get('author_name')
-            logger.debug(f"作者字段值: {value_to_set}")
-        elif douban_field_name == 'press':
-            value_to_set = book_info.get('press')
-            logger.debug(f"出版社字段值: {value_to_set}")
-        elif douban_field_name == 'pages':
-            pages_val = book_info.get('pages')
-            if pages_val is not None: # 仅当 pages_val 不是 None 时尝试转换
-                try:
-                    value_to_set = int(pages_val)
-                    logger.debug(f"成功转换页数字段: {pages_val} -> {value_to_set}")
-                except (ValueError, TypeError):
-                    logger.warning(f"无法将页数 '{pages_val}' 转换为整数 (ISBN: {book_info.get('ISBN')}).")
-            # 如果 pages_val 是 None, value_to_set 保持 None
-        elif douban_field_name == 'ISBN':
-            value_to_set = book_info.get('ISBN')
-            logger.debug(f"ISBN字段值: {value_to_set}")
-        elif douban_field_name == 'brand': # 出品方
-            value_to_set = book_info.get('brand')
-            logger.debug(f"出品方字段值: {value_to_set}")
-        elif douban_field_name == 'score': # 评分
-            score_val = book_info.get('score')
-            if score_val is not None: # 仅当 score_val 不是 None 时尝试转换
-                try:
-                    value_to_set = float(score_val)
-                    logger.debug(f"成功转换评分字段: {score_val} -> {value_to_set}")
-                except (ValueError, TypeError):
-                    logger.warning(f"无法将评分 '{score_val}' 转换为数字 (ISBN: {book_info.get('ISBN')}).")
-            # 如果 score_val 是 None, value_to_set 保持 None
-        elif douban_field_name == 'url': # 链接
-            link_url = book_info.get('url')
-            if link_url: # 仅当 link_url 有值时设置
-                value_to_set = {"link": link_url}
-                logger.debug(f"链接字段值: {value_to_set}")
-        elif douban_field_name == 'translator': # 译者
-            translator_val = book_info.get('translator')
-            if translator_val: # 仅当 translator_val 有值时设置 (处理 None 或空字符串)
-                value_to_set = translator_val
-                logger.debug(f"译者字段值: {value_to_set}")
-        elif douban_field_name == 'image_token' and image_token: # 假设 'image_token' 是 douban_to_feishu_header_mappings 中的一个键
-            value_to_set = [{"file_token": image_token}]
-            logger.debug("已设置图片token字段")
-        # 可以添加一个通用回退，但不推荐，因为特定类型处理更好
-        # elif douban_field_name in book_info:
-        #     value_to_set = book_info.get(douban_field_name)
+        # 使用字典映射简化字段处理
+        field_handlers = {
+            'book_name': lambda: book_info.get('book_name'),
+            'author_name': lambda: book_info.get('author_name'),
+            'press': lambda: book_info.get('press'),
+            'pages': lambda: int(book_info.get('pages')) if book_info.get('pages') else None,
+            'ISBN': lambda: book_info.get('ISBN'),
+            'brand': lambda: book_info.get('brand'),
+            'score': lambda: float(book_info.get('score')) if book_info.get('score') else None,
+            'url': lambda: {"link": book_info.get('url')} if book_info.get('url') else None,
+            'translator': lambda: book_info.get('translator') if book_info.get('translator') else None,
+            'image_token': lambda: _upload_image(book_info)
+        }
+
+        # 处理字段
+        if douban_field_name in field_handlers:
+            try:
+                value_to_set = field_handlers[douban_field_name]()
+                logger.debug(f"字段 '{douban_field_name}' 的值: {value_to_set}")
+            except Exception as e:
+                logger.warning(f"处理字段 '{douban_field_name}' 时出错: {e}")
 
         # 确定实际的飞书字段名作为键
-        actual_feishu_field_name = None
-        if feishu_key_from_mapping in id_to_name_map:
-            actual_feishu_field_name = id_to_name_map[feishu_key_from_mapping]
-            logger.debug(f"映射提供的键 '{feishu_key_from_mapping}' 是一个字段ID, 已转换为字段名 '{actual_feishu_field_name}'.")
-        elif feishu_key_from_mapping in name_set:
-            actual_feishu_field_name = feishu_key_from_mapping
-            logger.debug(f"映射提供的键 '{feishu_key_from_mapping}' 已经是一个有效的字段名.")
-        else:
-            # 如果既不是已知ID也不是已知名称，记录警告并按原样使用，这可能会在后续步骤中导致问题
-            logger.warning(f"映射提供的键 '{feishu_key_from_mapping}' (来自豆瓣字段 '{douban_field_name}') 既不是有效的飞书字段ID也不是已知的飞书字段名. 将尝试按原样使用. ISBN: {book_info.get('ISBN')}")
-            actual_feishu_field_name = feishu_key_from_mapping
+        actual_feishu_field_name = _get_actual_feishu_field_name(feishu_key_from_mapping, id_to_name_map, name_set, douban_field_name, book_info)
 
         # 仅当确定了有效值和有效的飞书字段名时才添加到字典中
         if value_to_set is not None and actual_feishu_field_name is not None:
             fields_data_with_headers[actual_feishu_field_name] = value_to_set
             logger.debug(f"已添加字段 '{actual_feishu_field_name}' (值为: {type(value_to_set)}) 到准备好的飞书数据中.")
-        elif actual_feishu_field_name is None:
-            logger.warning(f"无法确定飞书字段名，跳过豆瓣字段 '{douban_field_name}' (映射键: '{feishu_key_from_mapping}'). ISBN: {book_info.get('ISBN')}")
-        else: # value_to_set is None
-            logger.debug(f"豆瓣字段 '{douban_field_name}' (映射到飞书字段 '{actual_feishu_field_name}') 的值为空，跳过添加.")
 
     # 记录最终数据摘要
     logger.info(f"飞书数据准备完成，共生成 {len(fields_data_with_headers)} 个字段")
     logger.debug(f"最终飞书数据: { {k: type(v) for k, v in fields_data_with_headers.items()} }")
     
     # 检查关键字段
-    required_fields = ["书名", "作者", "ISBN"]
+    required_fields = ["书名", "作者", "ISBN", "封面"]
     missing_fields = [field for field in required_fields if field not in fields_data_with_headers]
     if missing_fields:
         logger.warning(f"缺少关键字段: {missing_fields} (ISBN: {book_info.get('ISBN')})")
     
     return {"fields": fields_data_with_headers}
+
+
+def _upload_image(book_info):
+    image_url = book_info.get('book_img')
+    if image_url:
+        try:
+            logger.info(f"尝试上传封面图片: {image_url}")
+            uploaded_token = feishu_api.upload_image_from_url(image_url)
+            if uploaded_token:
+                logger.info(f"封面上传成功, file_token: {uploaded_token}")
+                return [{"file_token": uploaded_token}]
+            else:
+                logger.warning(f"封面上传失败，未获取到 file_token for URL: {image_url}")
+        except Exception as e:
+            logger.error(f"上传封面图片失败 (URL: {image_url}): {e}")
+    return None
+
+
+def _get_actual_feishu_field_name(feishu_key_from_mapping, id_to_name_map, name_set, douban_field_name, book_info):
+    if feishu_key_from_mapping in id_to_name_map:
+        actual_feishu_field_name = id_to_name_map[feishu_key_from_mapping]
+        logger.debug(f"映射提供的键 '{feishu_key_from_mapping}' 是一个字段ID, 已转换为字段名 '{actual_feishu_field_name}'.")
+    elif feishu_key_from_mapping in name_set:
+        actual_feishu_field_name = feishu_key_from_mapping
+        logger.debug(f"映射提供的键 '{feishu_key_from_mapping}' 已经是一个有效的字段名.")
+    else:
+        logger.warning(f"映射提供的键 '{feishu_key_from_mapping}' (来自豆瓣字段 '{douban_field_name}') 既不是有效的飞书字段ID也不是已知的飞书字段名. 将尝试按原样使用. ISBN: {book_info.get('ISBN')}")
+        actual_feishu_field_name = feishu_key_from_mapping
+    return actual_feishu_field_name
 
 @app.route('/get_book_info', methods=['GET'])
 def get_book_info():
@@ -192,8 +175,7 @@ def sync_to_feishu():
             logger.info(f"准备更新飞书记录 ID: {record_id} (ISBN: {isbn})")
             prepared_data_with_names = _prepare_feishu_book_data(
                 book_info, 
-                user_field_mappings, # Use mappings from request for both create/update
-                image_token= None  # No image token for update
+                user_field_mappings  # Use mappings from request for both create/update
             )
             logger.debug(f"数据准备完成 (飞书表头名称为键): {prepared_data_with_names}")
             # Check if there are any fields to update in prepared_data_with_names
@@ -225,28 +207,10 @@ def sync_to_feishu():
         else:
             # Create new record
             logger.info(f"准备创建新飞书记录 (ISBN: {isbn})")
-
-            # 3. Handle image upload if necessary
-            current_image_token = book_info.get('image_token') # Prefer existing token from book_info
-            # If image_url is provided and no token yet (applies to new or existing records needing image update)
-            if ('image_url' in book_info and book_info['image_url']) and not current_image_token:
-                try:
-                    logger.info(f"尝试上传封面图片: {book_info['image_url']}")
-                    uploaded_token = feishu_api.upload_image_from_url(book_info['image_url'])
-                    if uploaded_token:
-                        current_image_token = uploaded_token
-                        book_info['image_token'] = current_image_token # Update book_info with new token
-                        logger.info(f"封面上传成功, image_token: {current_image_token}")
-                    else:
-                        logger.warning(f"封面上传失败，未获取到 image_token for URL: {book_info['image_url']}")
-                except Exception as e:
-                    logger.error(f"上传封面图片失败 (URL: {book_info['image_url']}): {e}")
-                    # Proceed without image if upload fails, or handle as fatal error if required
-
+            
             prepared_data_with_names = _prepare_feishu_book_data(
                 book_info, 
-                user_field_mappings, # Use mappings from request for both create/update
-                image_token=current_image_token # Pass the potentially new/updated token
+                user_field_mappings  # Use mappings from request for both create/update
             )
             logger.debug(f"数据准备完成 (飞书表头名称为键): {prepared_data_with_names}")
 

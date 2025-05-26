@@ -634,3 +634,86 @@ UnboundLocalError: cannot access local variable 'current_image_token' where it i
 2025-05-26 22:41:52,795 - bookinfo2feishu - INFO - Creating new book record in table: tblQp2OQgxamLR3x with data: {'fields': {'书名': '人类知识演化史', 'ISBN': '9787522525013', '作者': '[德] 于尔根·雷恩', '版权方': '后浪', '页数': 648, '出版社': '九州出版社', '豆瓣评分': 8.3, '译者': '朱丹琼', '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}}}
 2025-05-26 22:41:55,023 - bookinfo2feishu - INFO - Successfully created new book record. Response: {'record': {'fields': {'ISBN': '9787522525013', '书名': '人类知识演化史', '作者': '[德] 于尔根·雷恩', '出版社': '九州出版社', '版权方': '后浪', '译者': '朱丹琼', '豆瓣评分': 8.3, '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}, '页数': 648}, 'id': 'recuMjyUnUfMB6', 'record_id': 'recuMjyUnUfMB6'}}
 2025-05-26 22:41:55,023 - bookinfo2feishu - INFO - 成功添加图书: 人类知识演化史 (ISBN: 9787522525013, 新记录ID: True)
+2025-05-27 06:48:30,300 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 06:48:30,300 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 06:48:30,489 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 06:48:30,646 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 06:48:30,646 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 06:48:30,786 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 06:49:15,180 - bookinfo2feishu - INFO - 已保存飞书配置到文件
+2025-05-27 06:49:15,182 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 06:49:15,314 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 06:49:15,314 - bookinfo2feishu - INFO - 飞书配置已更新: AppID: cli_a246770639f8900c, TableID: tblQp2OQgxamLR3x
+2025-05-27 06:49:19,533 - bookinfo2feishu - INFO - 获取豆瓣图书信息: 9787522525013
+2025-05-27 06:49:19,533 - bookinfo2feishu - INFO - Attempting to scrape Douban for ISBN: 9787522525013 at URL: https://douban.com/isbn/9787522525013
+2025-05-27 06:49:21,491 - bookinfo2feishu - INFO - Successfully scraped book: 人类知识演化史 (ISBN: 9787522525013)
+2025-05-27 06:49:21,499 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-27 06:49:21,863 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-27 06:49:25,153 - bookinfo2feishu - INFO - 开始同步图书到飞书: 人类知识演化史 (ISBN: 9787522525013)
+2025-05-27 06:49:25,153 - bookinfo2feishu - INFO - Searching for book with ISBN: 9787522525013 in table: tblQp2OQgxamLR3x
+2025-05-27 06:49:28,227 - bookinfo2feishu - INFO - No book found with ISBN: 9787522525013 in table: tblQp2OQgxamLR3x
+2025-05-27 06:49:28,228 - bookinfo2feishu - INFO - 准备创建新飞书记录 (ISBN: 9787522525013)
+2025-05-27 06:49:28,228 - bookinfo2feishu - INFO - 开始准备飞书数据，ISBN: 9787522525013
+2025-05-27 06:49:28,228 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-27 06:49:28,514 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-27 06:49:28,515 - bookinfo2feishu - INFO - 飞书数据准备完成，共生成 9 个字段
+2025-05-27 06:49:28,515 - bookinfo2feishu - INFO - Creating new book record in table: tblQp2OQgxamLR3x with data: {'fields': {'书名': '人类知识演化史', 'ISBN': '9787522525013', '作者': '[德] 于尔根·雷恩', '版权方': '后浪', '页数': 648, '出版社': '九州出版社', '豆瓣评分': 8.3, '译者': '朱丹琼', '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}}}
+2025-05-27 06:49:30,871 - bookinfo2feishu - INFO - Successfully created new book record. Response: {'record': {'fields': {'ISBN': '9787522525013', '书名': '人类知识演化史', '作者': '[德] 于尔根·雷恩', '出版社': '九州出版社', '版权方': '后浪', '译者': '朱丹琼', '豆瓣评分': 8.3, '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}, '页数': 648}, 'id': 'recuMlxFfqOwhj', 'record_id': 'recuMlxFfqOwhj'}}
+2025-05-27 06:49:30,872 - bookinfo2feishu - INFO - 成功添加图书: 人类知识演化史 (ISBN: 9787522525013, 新记录ID: True)
+2025-05-27 06:56:28,954 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 06:56:28,954 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 06:56:29,082 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 06:58:02,072 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 06:58:02,072 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 06:58:02,214 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 06:58:41,135 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 06:58:41,136 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 06:58:41,277 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 06:59:35,816 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 06:59:35,816 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 06:59:35,961 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 06:59:46,705 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 06:59:46,706 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 06:59:46,840 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 07:03:52,282 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 07:03:52,283 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 07:03:52,425 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 07:07:38,451 - bookinfo2feishu - INFO - 获取豆瓣图书信息: 9787522525013
+2025-05-27 07:07:38,453 - bookinfo2feishu - INFO - Attempting to scrape Douban for ISBN: 9787522525013 at URL: https://douban.com/isbn/9787522525013
+2025-05-27 07:07:39,791 - bookinfo2feishu - INFO - Successfully scraped book: 人类知识演化史 (ISBN: 9787522525013)
+2025-05-27 07:07:39,804 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-27 07:07:40,154 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-27 07:07:42,000 - bookinfo2feishu - INFO - 开始同步图书到飞书: 人类知识演化史 (ISBN: 9787522525013)
+2025-05-27 07:07:42,000 - bookinfo2feishu - INFO - Searching for book with ISBN: 9787522525013 in table: tblQp2OQgxamLR3x
+2025-05-27 07:07:43,487 - bookinfo2feishu - INFO - No book found with ISBN: 9787522525013 in table: tblQp2OQgxamLR3x
+2025-05-27 07:07:43,487 - bookinfo2feishu - INFO - 准备创建新飞书记录 (ISBN: 9787522525013)
+2025-05-27 07:07:43,487 - bookinfo2feishu - INFO - 开始准备飞书数据，ISBN: 9787522525013
+2025-05-27 07:07:43,487 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-27 07:07:43,900 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-27 07:07:43,900 - bookinfo2feishu - INFO - 飞书数据准备完成，共生成 9 个字段
+2025-05-27 07:07:43,900 - bookinfo2feishu - INFO - Creating new book record in table: tblQp2OQgxamLR3x with data: {'fields': {'书名': '人类知识演化史', 'ISBN': '9787522525013', '作者': '[德] 于尔根·雷恩', '版权方': '后浪', '页数': 648, '出版社': '九州出版社', '豆瓣评分': 8.3, '译者': '朱丹琼', '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}}}
+2025-05-27 07:07:45,412 - bookinfo2feishu - INFO - Successfully created new book record. Response: {'record': {'fields': {'ISBN': '9787522525013', '书名': '人类知识演化史', '作者': '[德] 于尔根·雷恩', '出版社': '九州出版社', '版权方': '后浪', '译者': '朱丹琼', '豆瓣评分': 8.3, '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}, '页数': 648}, 'id': 'recuMlCg484cf5', 'record_id': 'recuMlCg484cf5'}}
+2025-05-27 07:07:45,413 - bookinfo2feishu - INFO - 成功添加图书: 人类知识演化史 (ISBN: 9787522525013, 新记录ID: True)
+2025-05-27 07:14:04,102 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 07:14:04,102 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 07:14:04,247 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-27 07:20:09,631 - bookinfo2feishu - INFO - 获取豆瓣图书信息: 9787522525013
+2025-05-27 07:20:09,632 - bookinfo2feishu - INFO - Attempting to scrape Douban for ISBN: 9787522525013 at URL: https://douban.com/isbn/9787522525013
+2025-05-27 07:20:11,169 - bookinfo2feishu - INFO - Successfully scraped book: 人类知识演化史 (ISBN: 9787522525013)
+2025-05-27 07:20:11,183 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-27 07:20:11,599 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-27 07:25:57,579 - bookinfo2feishu - INFO - 开始同步图书到飞书: 人类知识演化史 (ISBN: 9787522525013)
+2025-05-27 07:25:57,580 - bookinfo2feishu - INFO - Searching for book with ISBN: 9787522525013 in table: tblQp2OQgxamLR3x
+2025-05-27 07:25:58,788 - bookinfo2feishu - INFO - No book found with ISBN: 9787522525013 in table: tblQp2OQgxamLR3x
+2025-05-27 07:25:58,789 - bookinfo2feishu - INFO - 准备创建新飞书记录 (ISBN: 9787522525013)
+2025-05-27 07:25:58,789 - bookinfo2feishu - INFO - 开始准备飞书数据，ISBN: 9787522525013
+2025-05-27 07:25:58,789 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-27 07:25:59,145 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-27 07:25:59,146 - bookinfo2feishu - INFO - 飞书数据准备完成，共生成 9 个字段
+2025-05-27 07:25:59,147 - bookinfo2feishu - WARNING - 缺少关键字段: ['封面'] (ISBN: 9787522525013)
+2025-05-27 07:25:59,147 - bookinfo2feishu - INFO - Creating new book record in table: tblQp2OQgxamLR3x with data: {'fields': {'书名': '人类知识演化史', 'ISBN': '9787522525013', '作者': '[德] 于尔根·雷恩', '版权方': '后浪', '页数': 648, '出版社': '九州出版社', '豆瓣评分': 8.3, '译者': '朱丹琼', '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}}}
+2025-05-27 07:26:00,632 - bookinfo2feishu - INFO - Successfully created new book record. Response: {'record': {'fields': {'ISBN': '9787522525013', '书名': '人类知识演化史', '作者': '[德] 于尔根·雷恩', '出版社': '九州出版社', '版权方': '后浪', '译者': '朱丹琼', '豆瓣评分': 8.3, '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}, '页数': 648}, 'id': 'recuMlGQZxnKpN', 'record_id': 'recuMlGQZxnKpN'}}
+2025-05-27 07:26:00,633 - bookinfo2feishu - INFO - 成功添加图书: 人类知识演化史 (ISBN: 9787522525013, 新记录ID: True)
+2025-05-27 07:29:54,875 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 07:29:54,876 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 07:29:55,011 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
