@@ -64,7 +64,8 @@ def _prepare_feishu_book_data(book_info: dict, douban_to_feishu_header_mappings:
             'score': lambda: float(book_info.get('score')) if book_info.get('score') else None,
             'url': lambda: {"link": book_info.get('url')} if book_info.get('url') else None,
             'translator': lambda: book_info.get('translator') if book_info.get('translator') else None,
-            'book_img': lambda: _upload_image(book_info)
+            'book_img': lambda: feishu_api.upload_image_from_url(book_info.get('book_img')) if book_info.get('book_img') else None,
+            'pub_date': lambda: book_info.get('pub_date'),
         }
 
         # 处理字段
@@ -94,23 +95,6 @@ def _prepare_feishu_book_data(book_info: dict, douban_to_feishu_header_mappings:
         logger.warning(f"缺少关键字段: {missing_fields} (ISBN: {book_info.get('ISBN')})")
     
     return {"fields": fields_data_with_headers}
-
-
-def _upload_image(book_info):
-    image_url = book_info.get('book_img')
-    if image_url:
-        try:
-            logger.info(f"尝试上传封面图片: {image_url}")
-            uploaded_token = feishu_api.upload_image_from_url(image_url)
-            if uploaded_token:
-                logger.info(f"封面上传成功, file_token: {uploaded_token}")
-                return [{"file_token": uploaded_token}]
-            else:
-                logger.warning(f"封面上传失败，未获取到 file_token for URL: {image_url}")
-        except Exception as e:
-            logger.error(f"上传封面图片失败 (URL: {image_url}): {e}")
-    return None
-
 
 def _get_actual_feishu_field_name(feishu_key_from_mapping, id_to_name_map, name_set, douban_field_name, book_info):
     if feishu_key_from_mapping in id_to_name_map:
@@ -163,15 +147,12 @@ def sync_to_feishu():
 
     try:
        
-        # 2. Check if book already exists in Feishu
+        # 查找飞书记录
         record_id = feishu_api.search_book_by_isbn(isbn)
         
-        # 4. Prepare data using _prepare_feishu_book_data (keys are Feishu header names)
-        
-        
-        # 7. Perform Feishu API operation (update or create)
+        # 更新或者创建图书记录
         if record_id:
-            # Update existing record
+            # 更新已经存在的图书记录
             logger.info(f"准备更新飞书记录 ID: {record_id} (ISBN: {isbn})")
             prepared_data_with_names = _prepare_feishu_book_data(
                 book_info, 
@@ -205,7 +186,7 @@ def sync_to_feishu():
                 logger.error(f"更新飞书记录失败 (ISBN: {isbn}, 记录ID: {record_id}): {str(e)}", exc_info=True)
                 return jsonify({"code": 500, "message": f"更新飞书记录失败: {str(e)}", "error_details": str(e), "record_id": record_id})
         else:
-            # Create new record
+            # 新增图书记录
             logger.info(f"准备创建新飞书记录 (ISBN: {isbn})")
             
             prepared_data_with_names = _prepare_feishu_book_data(

@@ -143,11 +143,9 @@ header h1 {
     flex-direction: column;
     overflow-y: auto; /* 内容过多时可滚动 */
 }
-
-.drawer.open {
+.drawer.show {
     right: 0; /* 打开状态 */
 }
-
 .drawer-header {
     display: flex;
     justify-content: space-between;
@@ -431,5 +429,75 @@ header h1 {
     .sync-button {
         width: 100%;
         margin-top: 0;
+    }
+}
+
+.tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: help;
+    width: 20px;
+    height: 20px;
+    background-color: #03dac6;
+    color: #121212;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.tooltip:hover {
+    background-color: #018786;
+    transform: scale(1.1);
+}
+
+.tooltip.icon {
+    float: right;
+    margin-left: 10px;
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: normal;
+    word-wrap: break-word;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    max-width: 300px;
+    /* 智能定位 - 默认显示在右侧 */
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 8px;
+}
+
+/* 如果右侧空间不足，显示在左侧 */
+@media (max-width: 768px) {
+    .tooltip:hover::after {
+        left: auto;
+        right: 100%;
+        margin-left: 0;
+        margin-right: 8px;
+    }
+}
+
+/* 如果上下空间不足，调整垂直位置 */
+.tooltip:hover::after {
+    animation: checkPosition 0.1s forwards;
+}
+
+@keyframes checkPosition {
+    0% { opacity: 0; }
+    100% {
+        opacity: 1;
+        top: clamp(0%, calc(100% - var(--tooltip-height)), 100%);
     }
 }
