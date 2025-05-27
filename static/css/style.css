@@ -1,28 +1,32 @@
-/* 超现代风格 CSS */
+/* Skeuomorphic Design CSS */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #121212; /* 深色背景 */
-    color: #e0e0e0; /* 浅色文字 */
+    font-family: 'Georgia', 'Times New Roman', serif; /* Classic serif font */
+    background-color: #f5f5dc; /* Light beige, like old paper */
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3NtbW1xcXFxcXF+fn5wcHDY2Njb29vW1tbHx8ejo6PFxcV+/v7v7+/R0dG7u7uysrKdnZ3p6enk5OTR0dEAAAAA1f3zAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAOXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QIG9uIGEgTWFjYmluYSAoMy4xMC4xOSkgMjAyNC0wMy0wNCAxNTozODowOC41MjgwMjkgLTA4MDAG3cT8AAAAcElEQVR42u2WQQ6AMAgDBxLNYrG0tP//t0YDrAlnC0bgD+fZCAdcW53H3XAlB87oNWIjN6d7iJ8f4DQDfLbRjLzMT3/TwdvC7T4wP443L+bj0f5y7P97wHh8yX/YfAP4HkX+K0P3N+ApPzF/ivzfAj8N+BvAXwj8F/gvwF8B/gV/G/BXgL8A/gL8BfyXgP8C/CXgP8C/APwF+AvwXwH+BfxnAX8B/AX4C/BfAf4F+AvwXwH+AvxnAf8B/AX4C/BfAf4F+AvwXwH+AvxnAf8B/AX4C/BfAf4F+AvwXwH+AvxnAf8B/AX4C/BfAf4F+AvwXwH+AvxnAf8B/AX4C/BfAf4F+AvwXwH+AvxnAf8B/AX4C/BfAf4F+AvwXwH+AvxnAf8B/BXgX3CbBwLhFGHLCzV1AAAAAElFTkSuQmCC"); /* Subtle noise texture */
+    color: #5a4a42; /* Dark brown text */
     margin: 0;
-    padding: 0;
+    padding: 20px; /* Add some padding to the body */
     line-height: 1.6;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden; /* 防止抽屉打开时出现水平滚动条 */
+    overflow-x: hidden;
 }
 
 .container {
-    background-color: #1e1e1e; /* 稍浅的深色背景 */
+    background-color: #d2b48c; /* Tan / light wood color */
     padding: 30px 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* 更深的阴影 */
+    border-radius: 10px; /* Slightly rounded corners for a physical object feel */
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3), /* Outer shadow for raised effect */
+        inset 0 0 10px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
     width: 90%;
-    max-width: 600px;
+    max-width: 650px; /* Increased max-width slightly */
     text-align: center;
     position: relative;
-    overflow: hidden; /* 确保内容在容器内 */
+    overflow: hidden;
+    border: 2px solid #8b4513; /* Darker brown border, like a wooden frame */
 }
 
 header {
@@ -30,154 +34,215 @@ header {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
-    border-bottom: 1px solid #333;
+    border-bottom: 2px dashed #8b5a2b; /* Dashed line like stitching or a groove */
     padding-bottom: 20px;
 }
 
 header h1 {
-    font-size: 2.5em;
-    color: #bb86fc; /* 紫色调，科技感 */
+    font-family: 'Georgia', 'Times New Roman', serif; /* Serif font for classic feel */
+    font-size: 2.8em; /* Slightly larger */
+    color: #654321; /* Darker brown, like engraved text */
     margin: 0;
-    font-weight: 300;
+    font-weight: bold; /* Bold for emphasis */
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.7); /* Slight highlight for engraved look */
 }
 
 .config-button {
-    background: none;
-    border: none;
-    color: #03dac6; /* 青色调，科技感 */
-    font-size: 1.8em;
+    background: linear-gradient(to bottom, #c0c0c0, #a0a0a0); /* Metallic gradient */
+    border: 1px solid #808080; /* Darker border for definition */
+    color: #333; /* Dark icon color */
+    /* font-size: 1.8em; */ /* Removed as icon is now an image */
     cursor: pointer;
-    transition: transform 0.3s ease;
+    padding: 8px; /* Add some padding */
+    border-radius: 50%; /* Make it circular like a gear */
+    display: inline-flex; /* Align icon and text */
+    align-items: center; /* Align icon and text */
+    justify-content: center; /* Center content if button is just icon */
+    box-shadow: 
+        0 2px 3px rgba(0,0,0,0.4), /* Outer shadow */
+        inset 0 1px 1px rgba(255,255,255,0.5); /* Inner highlight for 3D effect */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .config-button:hover {
-    transform: rotate(45deg);
+    background: linear-gradient(to bottom, #b0b0b0, #909090); /* Slightly darker on hover */
+    box-shadow: 
+        0 3px 5px rgba(0,0,0,0.5),
+        inset 0 1px 1px rgba(255,255,255,0.6);
+    transform: translateY(-1px); /* Slight lift on hover */
+}
+
+.config-button:active {
+    background: linear-gradient(to top, #c0c0c0, #a0a0a0); /* Invert gradient for pressed look */
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.4), /* Deeper inner shadow */
+        0 1px 1px rgba(0,0,0,0.2); 
+    transform: translateY(1px); /* Depress button */
 }
 
 .isbn-input-container {
     display: flex;
     margin-bottom: 25px;
-    gap: 10px; /* 输入框和按钮之间的间距 */
+    gap: 15px; /* Increased gap */
 }
 
 #isbn-input {
     flex-grow: 1;
     padding: 15px;
     font-size: 1.1em;
-    border: 1px solid #333;
-    border-radius: 8px;
-    background-color: #2c2c2c; /* 输入框背景 */
-    color: #e0e0e0;
+    font-family: 'Georgia', serif; /* Consistent font */
+    border: 1px solid #a0522d; /* Sienna border */
+    border-radius: 6px;
+    background-color: #fdf5e6; /* Lighter beige, like paper inset */
+    color: #5a4a42;
     outline: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15); /* Inset shadow for recessed look */
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #isbn-input:focus {
-    border-color: #bb86fc;
-    box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.3);
+    border-color: #8b4513; /* Darker brown border on focus */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 5px rgba(139, 69, 19, 0.5); /* More pronounced inset and outer glow */
 }
 
 #submit-isbn-btn {
     padding: 15px 25px;
     font-size: 1.1em;
-    background-color: #03dac6; /* 青色按钮 */
-    color: #121212; /* 深色文字 */
-    border: none;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: linear-gradient(to bottom, #b8860b, #8b5a2b); /* Dark goldenrod to saddle brown */
+    color: #fff; /* White text for contrast */
+    border: 1px solid #5a3a1a; /* Darker border */
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2); /* 3D effect */
+    transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
     font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
 }
 
 #submit-isbn-btn:hover {
-    background-color: #018786; /* 深一点的青色 */
-    transform: translateY(-2px);
+    background: linear-gradient(to bottom, #c8961b, #9b6a3b); /* Slightly lighter on hover */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+    transform: translateY(-1px);
+}
+
+#submit-isbn-btn:active {
+    background: linear-gradient(to top, #b8860b, #8b5a2b); /* Invert gradient */
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.1);
+    transform: translateY(1px); /* Depress button */
 }
 
 #message-area, #book-info-area {
     margin-top: 20px;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 20px; /* Increased padding */
+    border-radius: 6px;
     text-align: left;
     font-size: 0.95em;
+    background-color: #faf0e6; /* Linen background */
+    border: 1px solid #d2b48c; /* Tan border */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Subtle inset */
 }
 
 #message-area.success {
-    background-color: rgba(3, 218, 198, 0.1); /* 青色背景，透明 */
-    color: #03dac6;
-    border: 1px solid #03dac6;
+    background-color: #e6f4e6; /* Light green, paper-like */
+    color: #38761d; /* Dark green text */
+    border: 1px solid #a9dba9; /* Green border */
+    /* Consider adding a faint checkmark icon as background later */
 }
 
 #message-area.error {
-    background-color: rgba(207, 102, 121, 0.1); /* 红色背景，透明 */
-    color: #cf6679; /* Material Design 错误颜色 */
-    border: 1px solid #cf6679;
+    background-color: #fdecea; /* Light red, paper-like */
+    color: #990000; /* Dark red text */
+    border: 1px solid #f5c6cb; /* Red border */
+    /* Consider adding a faint 'x' icon as background later */
 }
 
 #book-info-area {
-    background-color: #2c2c2c;
-    border: 1px solid #333;
+    background-color: #fffaf0; /* Floral white, like a nice paper */
+    border: 1px solid #d2b48c; /* Tan border */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Slight outer shadow for a card effect */
 }
 
 #book-info-area h3 {
-    color: #bb86fc;
+    color: #8b4513; /* Saddle brown */
     margin-top: 0;
+    border-bottom: 1px solid #e0cda9; /* Light separator */
+    padding-bottom: 8px;
 }
 
 #book-info-area p {
-    margin: 8px 0;
+    margin: 10px 0; /* Increased margin */
 }
 
-/* 抽屉样式 */
+/* Drawer Styles */
 .drawer {
     position: fixed;
     top: 0;
-    right: -400px; /* 初始状态在屏幕外，宽度可调整 */
-    width: 380px; /* 抽屉宽度 */
+    right: -420px; /* Adjusted for potential wider border/padding */
+    width: 400px; 
     height: 100%;
-    background-color: #2a2a2a; /* 抽屉背景色 */
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* 平滑过渡效果 */
+    background-color: #e0cda9; /* Light wood / parchment color */
+    box-shadow: -8px 0 20px rgba(0, 0, 0, 0.4); /* More pronounced shadow for drawer */
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* 内容过多时可滚动 */
+    border-left: 3px solid #8b5a2b; /* Dark wood "edge" */
+    overflow-y: auto; 
 }
 .drawer.show {
-    right: 0; /* 打开状态 */
+    right: 0; 
 }
 .drawer-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: #333333; /* 抽屉头部背景 */
-    border-bottom: 1px solid #444;
+    padding: 20px 25px; /* Increased padding */
+    background-color: #c1a87c; /* Darker wood for header */
+    border-bottom: 2px solid #8b5a2b; /* Groove effect */
+    box-shadow: inset 0 -2px 5px rgba(0,0,0,0.1);
 }
 
 .drawer-header h2 {
     margin: 0;
-    font-size: 1.5em;
-    color: #bb86fc;
-    font-weight: 400;
+    font-size: 1.6em; /* Slightly larger */
+    color: #5a3a1a; /* Dark brown, like carved text */
+    font-weight: bold;
+    text-shadow: 1px 1px 0px rgba(255,255,255,0.3); /* Light highlight */
 }
 
 .close-button {
-    background: none;
-    border: none;
-    color: #e0e0e0;
-    font-size: 1.8em;
+    background: linear-gradient(to bottom, #e0e0e0, #c0c0c0); /* Light metallic gradient */
+    border: 1px solid #909090;
+    color: #555;
+    /* font-size: 1.6em; */ /* Removed as icon is now an image */
     cursor: pointer;
-    transition: color 0.3s ease;
+    padding: 6px 10px; /* Padding for a button feel */
+    border-radius: 5px; /* Rounded corners */
+    display: inline-flex; /* Ensure icon is centered if button is just icon */
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5);
+    transition: all 0.2s ease;
 }
 
 .close-button:hover {
-    color: #03dac6;
+    background: linear-gradient(to bottom, #d0d0d0, #b0b0b0);
+    color: #333;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6);
+    transform: translateY(-1px);
+}
+
+.close-button:active {
+    background: linear-gradient(to top, #e0e0e0, #c0c0c0);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.3);
+    transform: translateY(0px);
 }
 
 .drawer-content {
     padding: 25px;
     flex-grow: 1;
+    background-color: #f5f5dc; /* Same as body background for consistency inside drawer */
 }
 
 .form-group {
@@ -187,59 +252,77 @@ header h1 {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #aaa;
+    color: #7a6a5f; /* Softer brown for labels */
     font-size: 0.9em;
+    font-weight: bold;
 }
 
 .form-group input[type="text"],
 .form-group input[type="password"] {
-    width: calc(100% - 20px); /* 减去padding */
+    width: calc(100% - 24px); 
     padding: 12px;
     font-size: 1em;
-    border: 1px solid #444;
-    border-radius: 6px;
-    background-color: #383838;
-    color: #e0e0e0;
+    font-family: 'Georgia', serif;
+    border: 1px solid #b08d57; /* Tan border */
+    border-radius: 4px;
+    background-color: #fffaf0; /* Floral white, like paper */
+    color: #5a4a42;
     outline: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12); /* Softer inset */
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-group input[type="text"]:focus,
 .form-group input[type="password"]:focus {
-    border-color: #bb86fc;
-    box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.25);
+    border-color: #8b4513; /* Darker brown */
+    background-color: #ffffff; /* Brighter white on focus */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15), 0 0 5px rgba(139, 69, 19, 0.4);
 }
 
 #save-config-btn, #fetch-fields-btn {
     width: 100%;
-    padding: 12px;
-    font-size: 1.05em;
-    background-color: #03dac6;
-    color: #121212;
-    border: none;
-    border-radius: 6px;
+    padding: 14px; /* Increased padding */
+    font-size: 1.1em; /* Slightly larger font */
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: linear-gradient(to bottom, #a09070, #807050); /* Muted gold/brass color */
+    color: #fff;
+    border: 1px solid #605030; /* Darker border */
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    transition: all 0.2s ease;
     font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
     margin-top: 10px;
 }
 
 #save-config-btn:hover, #fetch-fields-btn:hover {
-    background-color: #018786;
+    background: linear-gradient(to bottom, #b0a080, #908060); /* Lighter on hover */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+    transform: translateY(-1px);
+}
+
+#save-config-btn:active, #fetch-fields-btn:active {
+    background: linear-gradient(to top, #a09070, #807050);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.4);
+    transform: translateY(1px);
 }
 
 #fields-mapping-area {
     margin-top: 20px;
     padding: 15px;
-    background-color: #333;
+    background-color: #e6d8c0; /* Light parchment */
     border-radius: 6px;
-    color: #ccc;
+    border: 1px solid #c8b8a0; /* Slightly darker border */
+    color: #5a4a42;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
 }
 
 #fields-mapping-area h4 {
-    color: #bb86fc;
+    color: #8b4513;
     margin-top: 0;
     margin-bottom: 10px;
+    font-family: 'Georgia', serif;
 }
 
 #fields-mapping-area div {
@@ -247,34 +330,40 @@ header h1 {
     font-size: 0.9em;
 }
 
-/* 响应式设计 */
+/* Responsive Design - adjustments might be needed after skeuomorphic changes */
 @media (max-width: 768px) {
     .container {
         width: 95%;
-        padding: 20px;
+        padding: 20px 25px; /* Adjusted padding */
     }
     header h1 {
-        font-size: 2em;
+        font-size: 2.2em; /* Adjusted for smaller screens */
     }
     .drawer {
-        width: 85%;
-        right: -90%; /* 调整初始位置以适应更宽的抽屉 */
+        width: 320px; /* Adjust drawer width for tablets */
+        right: -340px; 
     }
 }
 
 @media (max-width: 480px) {
+    body {
+        padding: 10px; /* Less padding on small screens */
+    }
     header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center; /* Center header items on mobile */
     }
     header h1 {
-        margin-bottom: 10px;
+        margin-bottom: 15px;
+        font-size: 2em;
     }
     .config-button {
-        align-self: flex-end;
+        align-self: center; /* Center config button */
+        margin-bottom: 10px; /* Space below config button if header wraps */
     }
     .isbn-input-container {
         flex-direction: column;
+        gap: 10px;
     }
     #submit-isbn-btn {
         width: 100%;
@@ -283,27 +372,42 @@ header h1 {
     .drawer {
         width: 100%;
         right: -100%;
+        border-left: none; /* No need for thick border if full width */
+    }
+    .drawer-header {
+        padding: 15px 20px;
+    }
+    .drawer-header h2 {
+        font-size: 1.4em;
+    }
+    .close-button {
+        font-size: 1.5em;
     }
 }
 
 /* ======================
-   字段映射配置样式
+   Field Mapping Configuration - Skeuomorphic
    ====================== */
 .mapping-section {
     margin: 25px 0;
     padding: 20px;
-    background-color: #2a2a2a;
-    border-radius: 10px;
-    border: 1px solid #333;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background-color: #e6d8c0; /* Light parchment / aged paper */
+    border-radius: 8px;
+    border: 1px solid #c8b8a0; /* Slightly darker, softer border */
+    box-shadow: 
+        0 3px 6px rgba(0, 0, 0, 0.15), /* Softer outer shadow */
+        inset 0 1px 4px rgba(0,0,0,0.05); /* Very subtle inset */
 }
 
 .mapping-section h4 {
-    color: #bb86fc;
+    color: #8b4513; /* Saddle Brown, like ink on parchment */
     margin-top: 0;
-    margin-bottom: 15px;
-    font-weight: 400;
-    font-size: 1.2em;
+    margin-bottom: 20px; /* More space below heading */
+    font-weight: bold; /* Clearer heading */
+    font-size: 1.3em; /* Slightly larger */
+    font-family: 'Georgia', serif;
+    border-bottom: 1px solid #d2b48c; /* Separator line */
+    padding-bottom: 10px;
 }
 
 .field-mapping {
@@ -311,193 +415,264 @@ header h1 {
     align-items: center;
     margin: 15px 0;
     gap: 15px;
+    padding: 10px;
+    background-color: #faf0e6; /* Linen background for each mapping item */
+    border-radius: 6px;
+    border: 1px solid #e0cda9;
 }
 
 .field-mapping span {
     flex: 1;
-    font-weight: 500;
-    color: #e0e0e0;
+    font-weight: normal; /* Less stark */
+    color: #5a4a42; /* Dark brown text */
+    font-size: 1em;
 }
 
 .field-select {
     flex: 2;
     padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    background-color: #383838;
-    color: #e0e0e0;
+    border-radius: 6px;
+    border: 1px solid #b08d57; /* Tan border, similar to inputs */
+    background-color: #fffaf0; /* Floral white */
+    color: #5a4a42;
     font-size: 0.95em;
-    transition: all 0.3s ease;
+    font-family: 'Georgia', serif;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
     outline: none;
+    appearance: none; /* Allows custom arrow if desired, for now, default */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5%207.5L10%2012.5L15%207.5%22%20stroke%3D%22%238B4513%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px 16px;
+    transition: all 0.3s ease;
 }
 
 .field-select:focus {
-    border-color: #bb86fc;
-    box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.25);
+    border-color: #8b4513; /* Darker brown on focus */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.15), 0 0 0 2px rgba(139, 69, 19, 0.2); /* Subtle focus ring */
 }
 
 .mapping-button, 
 .sync-button {
     margin-top: 20px;
     padding: 12px 25px;
-    border: none;
+    border: 1px solid; /* Base border definition */
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: bold; /* Make text bolder */
     font-size: 1em;
-    transition: all 0.3s ease;
+    font-family: 'Georgia', serif;
+    text-shadow: 1px 1px 0px rgba(255,255,255,0.2); /* Highlight for text */
+    transition: all 0.2s ease;
 }
 
-.mapping-button {
-    background-color: #6c757d;
-    color: #e0e0e0;
-}
-
-.sync-button {
-    background-color: #03dac6;
-    color: #121212;
+.mapping-button { /* E.g., "Clear Mappings" or secondary actions */
+    background: linear-gradient(to bottom, #d3c1a4, #bca88b); /* Aged paper/light leather */
+    color: #5a4a42; /* Dark brown text */
+    border-color: #a29074; /* Border matching background */
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
 }
 
 .mapping-button:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(to bottom, #c7b699, #b09c7f);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.35);
+    transform: translateY(-1px);
+}
+
+.mapping-button:active {
+    background: linear-gradient(to top, #d3c1a4, #bca88b);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.25);
+    transform: translateY(1px);
+}
+
+.sync-button { /* Primary action, e.g., "Save Mappings" */
+    background: linear-gradient(to bottom, #b8860b, #8b5a2b); /* Goldenrod/Brown, like main submit */
+    color: #fff;
+    border-color: #5a3a1a;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 .sync-button:hover {
-    background-color: #018786;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(to bottom, #c8961b, #9b6a3b);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+    transform: translateY(-1px);
 }
 
-/* 映射状态指示器 */
+.sync-button:active {
+    background: linear-gradient(to top, #b8860b, #8b5a2b);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.4);
+    transform: translateY(1px);
+}
+
+
+/* Map Status Indicator */
 .map-status {
     display: inline-block;
-    width: 20px;
+    width: 22px; /* Slightly wider */
+    height: 22px; /* Make it square */
+    line-height: 22px; /* Center text vertically */
     text-align: center;
     font-weight: bold;
     margin-left: 10px;
-}
-
-.map-status.mapped {
-    color: #03dac6;
-}
-
-.map-status.not-mapped {
-    color: #ff6b6b;
-}
-
-/* 映射摘要区域 */
-.mapping-summary {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 6px;
+    border-radius: 4px; /* Slightly rounded corners */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
     font-size: 0.9em;
 }
 
+.map-status.mapped {
+    background-color: #a9dba9; /* Light green, like a physical sticker */
+    color: #38761d; /* Dark green text */
+    border: 1px solid #87b887;
+}
+
+.map-status.not-mapped {
+    background-color: #f5c6cb; /* Light red, like a physical sticker */
+    color: #990000; /* Dark red text */
+    border: 1px solid #d9a0a7;
+}
+
+/* Mapping Summary Area */
+.mapping-summary {
+    margin-top: 20px; /* More space */
+    padding: 15px; /* More padding */
+    border-radius: 6px;
+    font-size: 0.9em;
+    line-height: 1.5;
+    border: 1px solid;
+    background-color: #faf0e6; /* Linen background */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
 .mapping-summary.has-mappings {
-    background-color: rgba(3, 218, 198, 0.1);
-    border: 1px solid rgba(3, 218, 198, 0.3);
+    background-color: #e6f4e6; /* Light green paper */
+    border-color: #a9dba9; /* Green border */
+    color: #38761d;
 }
 
 .mapping-summary.no-mappings {
-    background-color: rgba(255, 107, 107, 0.1);
-    border: 1px solid rgba(255, 107, 107, 0.3);
+    background-color: #fdecea; /* Light red paper */
+    border-color: #f5c6cb; /* Red border */
+    color: #990000;
 }
 
-/* 操作按钮区域 */
+/* Action Buttons Area */
 .mapping-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 15px; /* Increased gap */
+    margin-top: 25px; /* More space */
 }
 
-/* 移动端适配 */
-@media (max-width: 768px) {
-    .field-mapping {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    .field-select {
-        width: 100%;
-    }
-    .mapping-actions {
-        flex-direction: column;
-    }
-    .mapping-button, 
-    .sync-button {
-        width: 100%;
-        margin-top: 0;
-    }
-}
-
+/* Tooltip Styles */
 .tooltip {
     position: relative;
-    display: inline-flex;
+    display: inline-flex; /* Changed from inline-block */
     align-items: center;
     justify-content: center;
     cursor: help;
-    width: 20px;
-    height: 20px;
-    background-color: #03dac6;
-    color: #121212;
+    width: 22px; /* Slightly larger */
+    height: 22px;
+    background: linear-gradient(to bottom, #d0d0d0, #b0b0b0); /* Light metallic */
+    color: #444; /* Darker icon */
     border-radius: 50%;
-    font-size: 14px;
+    font-size: 15px; /* Larger '?' */
     font-weight: bold;
-    transition: all 0.3s ease;
+    border: 1px solid #909090;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4);
+    transition: all 0.2s ease;
 }
 
 .tooltip:hover {
-    background-color: #018786;
-    transform: scale(1.1);
+    background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
+    transform: scale(1.1) translateY(-1px); /* Slight lift and scale */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5);
 }
 
 .tooltip.icon {
-    float: right;
+    float: right; /* Keep this if it's for layout */
     margin-left: 10px;
 }
 
 .tooltip:hover::after {
     content: attr(data-tooltip);
     position: absolute;
-    background-color: #333;
-    color: #fff;
-    padding: 8px 12px;
+    background-color: #fffaf0; /* Floral white, like a paper note */
+    color: #5a4a42; /* Dark brown text */
+    padding: 10px 15px; /* More padding */
     border-radius: 6px;
     font-size: 14px;
+    font-family: 'Georgia', serif; /* Consistent font */
     white-space: normal;
     word-wrap: break-word;
-    z-index: 100;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
-    max-width: 300px;
-    /* 智能定位 - 默认显示在右侧 */
+    z-index: 1000; /* Ensure it's on top */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25); /* More pronounced shadow for popup */
+    border: 1px solid #d2b48c; /* Tan border, like the note is edged */
+    min-width: 220px; /* Min width */
+    max-width: 320px; /* Max width */
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
-    margin-left: 8px;
+    margin-left: 10px; /* Space from icon */
+    opacity: 0; /* Start hidden for animation */
+    animation: fadeInTooltip 0.2s 0.1s forwards; /* Fade in with slight delay */
 }
 
-/* 如果右侧空间不足，显示在左侧 */
+@keyframes fadeInTooltip {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments for tooltips if needed */
 @media (max-width: 768px) {
     .tooltip:hover::after {
         left: auto;
         right: 100%;
         margin-left: 0;
-        margin-right: 8px;
+        margin-right: 10px;
     }
 }
 
-/* 如果上下空间不足，调整垂直位置 */
-.tooltip:hover::after {
-    animation: checkPosition 0.1s forwards;
+/* Remove modern/flat specific transitions if they clash */
+/* Example: .config-button:hover transform: rotate(45deg) was removed. */
+
+/* General Considerations */
+/* Ensure fonts are consistently applied. Re-check if needed. */
+/* Avoid overly flat elements - gradients, shadows, borders are key. */
+
+/* Mobile specific for mapping section */
+@media (max-width: 768px) {
+    .field-mapping {
+        flex-direction: column;
+        align-items: stretch; /* Stretch items to full width */
+        gap: 10px;
+        padding: 15px;
+    }
+    .field-select {
+        width: 100%;
+    }
+    .mapping-actions {
+        flex-direction: column;
+        gap: 10px; /* Consistent gap */
+    }
+    .mapping-button, 
+    .sync-button {
+        width: 100%;
+        margin-top: 0; /* Remove top margin when stacked */
+        margin-bottom: 10px; /* Add bottom margin for spacing */
+    }
+    .mapping-actions > *:last-child {
+        margin-bottom: 0; /* No margin for the last button */
+    }
 }
 
-@keyframes checkPosition {
-    0% { opacity: 0; }
-    100% {
-        opacity: 1;
-        top: clamp(0%, calc(100% - var(--tooltip-height)), 100%);
-    }
+/* Icon specific styles */
+.icon-gear {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px; /* Space between gear icon and "配置" text */
+}
+
+.icon-close {
+    width: 16px;
+    height: 16px;
 }

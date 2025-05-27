@@ -50,22 +50,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 打开配置抽屉
-    configBtn.addEventListener('click', () => {
-        configDrawer.classList.add('open');
-    });
+    // 打开配置抽屉 - This listener is removed as the inline script in index.html handles toggling.
+    // configBtn.addEventListener('click', () => {
+    //     configDrawer.classList.add('show'); // Corrected to 'show' if it were to be kept
+    // });
 
     // 关闭配置抽屉
     closeDrawerBtn.addEventListener('click', () => {
-        configDrawer.classList.remove('open');
+        configDrawer.classList.remove('show'); // Corrected to 'show'
     });
 
-    // 点击抽屉外部关闭 (可选)
-    document.addEventListener('click', (event) => {
-        if (configDrawer.classList.contains('open') && !configDrawer.contains(event.target) && event.target !== configBtn) {
-            // configDrawer.classList.remove('open'); // 如果希望点击外部关闭，取消此行注释
-        }
-    });
+    // 点击抽屉外部关闭 (可选) - This logic is handled by the inline script in index.html.
+    // document.addEventListener('click', (event) => {
+    //     if (configDrawer.classList.contains('show') && 
+    //         !configDrawer.contains(event.target) && 
+    //         (configBtn && !configBtn.contains(event.target))) { // Robust check if configBtn exists and click is not within it
+    //         // configDrawer.classList.remove('show'); 
+    //     }
+    // });
 
     // 保存配置
     saveConfigBtn.addEventListener('click', async () => {
@@ -261,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 appSecretInput.value = config.app_secret || '';
                 appTokenInput.value = config.app_token || '';
                 tableIdInput.value = config.table_id || '';
-                viewIdInput.value = config.view_id || '';
+                // viewIdInput.value = config.view_id || ''; // Removed due to no viewIdInput element
             } catch (e) {
                 console.error('无法解析存储的配置:', e);
                 localStorage.removeItem('feishuConfig');
@@ -385,36 +387,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-function saveConfigToLocalStorage(config) {
-    localStorage.setItem('apiConfig', JSON.stringify(config));
-}
-
-function loadConfigFromLocalStorage() {
-    const config = localStorage.getItem('apiConfig');
-    return config ? JSON.parse(config) : null;
-}
-
-// 在保存配置时调用保存到缓存的函数
-function saveConfig() {
-    const config = {
-        appId: document.getElementById('appId').value,
-        appSecret: document.getElementById('appSecret').value,
-        token: document.getElementById('token').value,
-        tableId: document.getElementById('tableId').value
-    };
-    saveConfigToLocalStorage(config);
-    // ... existing code ...
-}
-
-// 在页面加载时调用从缓存加载配置的函数
-window.onload = function() {
-    const config = loadConfigFromLocalStorage();
-    if (config) {
-        document.getElementById('appId').value = config.appId;
-        document.getElementById('appSecret').value = config.appSecret;
-        document.getElementById('token').value = config.token;
-        document.getElementById('tableId').value = config.tableId;
-    }
-    // ... existing code ...
-}
+// Removed conflicting and unused configuration functions:
+// - saveConfigToLocalStorage(config)
+// - loadConfigFromLocalStorage()
+// - saveConfig()
+// - window.onload

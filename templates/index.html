@@ -10,7 +10,7 @@
     <div class="container">
         <header>
             <h1>图书信息同步</h1>
-            <button id="config-btn" class="config-button">⚙️ 配置</button>
+            <button id="config-btn" class="config-button"><img src="{{ url_for('static', filename='images/gear_icon.svg') }}" alt="Settings" class="icon-gear"> 配置</button>
         </header>
         <main>
             <div class="isbn-input-container">
@@ -25,7 +25,7 @@
     <div id="config-drawer" class="drawer">
         <div class="drawer-header">
             <h2>飞书 API 配置</h2>
-            <button id="close-drawer-btn" class="close-button">&times;</button>
+            <button id="close-drawer-btn" class="close-button"><img src="{{ url_for('static', filename='images/close_icon.svg') }}" alt="Close" class="icon-close"></button>
         </div>
         <div class="drawer-content">
             <div class="form-group">
@@ -58,10 +58,15 @@
     <script>
         document.addEventListener('click', function(event) {
             var drawer = document.getElementById('config-drawer');
-            if (!drawer.contains(event.target) && !event.target.matches('#config-btn')) {
-                drawer.classList.remove('show');
-            } else if (event.target.matches('#config-btn')) {
+            var configBtn = document.getElementById('config-btn');
+
+            // Check if the click was on the config button or one of its children
+            if (configBtn.contains(event.target)) { 
                 drawer.classList.toggle('show');
+            } 
+            // Else, if the click was NOT on configBtn AND was outside the drawer itself
+            else if (!drawer.contains(event.target)) { 
+                drawer.classList.remove('show');
             }
         });
     </script>
