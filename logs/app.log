@@ -808,3 +808,6 @@ UnboundLocalError: cannot access local variable 'current_image_token' where it i
 2025-05-27 07:56:04,147 - bookinfo2feishu - INFO - Creating new book record in table: tblQp2OQgxamLR3x with data: {'fields': {'书名': '人类知识演化史', 'ISBN': '9787522525013', '作者': '[德] 于尔根·雷恩', '版权方': '后浪', '页数': 648, '出版社': '九州出版社', '豆瓣评分': 8.3, '译者': '朱丹琼', '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}}}
 2025-05-27 07:56:05,638 - bookinfo2feishu - INFO - Successfully created new book record. Response: {'record': {'fields': {'ISBN': '9787522525013', '书名': '人类知识演化史', '作者': '[德] 于尔根·雷恩', '出版社': '九州出版社', '版权方': '后浪', '译者': '朱丹琼', '豆瓣评分': 8.3, '豆瓣链接': {'link': 'https://book.douban.com/subject/36638525/'}, '页数': 648}, 'id': 'recuMlOqycQ5e0', 'record_id': 'recuMlOqycQ5e0'}}
 2025-05-27 07:56:05,639 - bookinfo2feishu - INFO - 成功添加图书: 人类知识演化史 (ISBN: 9787522525013, 新记录ID: True)
+2025-05-27 08:01:10,735 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-27 08:01:10,735 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-27 08:01:10,883 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
