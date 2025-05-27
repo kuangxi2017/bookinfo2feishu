@@ -22,7 +22,7 @@ class AppConfig:
     # 日志配置
     LOG_DIR: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
     LOG_FILE: str = os.path.join(LOG_DIR, 'app.log')
-    LOG_LEVEL: str = 'INFO'
+    LOG_LEVEL: str = 'DEBUG'
     LOG_FORMAT: str = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     LOG_DATE_FORMAT: str = '%Y-%m-%d %H:%M:%S'
     

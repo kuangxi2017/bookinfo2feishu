@@ -25,14 +25,14 @@ AppConfig.initialize()
 douban_scraper = DoubanScraper()
 feishu_api = FeishuAPI()
 
-def _prepare_feishu_book_data(book_info: dict, douban_to_feishu_header_mappings: dict, image_token: Optional[str] = None) -> Dict[str, Any]:
+def _prepare_feishu_book_data(book_info: dict, douban_to_feishu_header_mappings: dict) -> Dict[str, Any]:
     """
     根据豆瓣图书信息和用户选择的映射关系（豆瓣字段名 -> 飞书表头字段名或字段ID）准备数据。
     此函数返回的 "fields" 字典的键始终是飞书的 *表头字段名*。
     如果输入的映射关系中，飞书侧的值是字段ID，此函数会尝试将其转换为对应的表头字段名。
     """
     logger.info(f"开始准备飞书数据，ISBN: {book_info.get('ISBN')}")
-    logger.debug(f"输入参数 - book_info: {book_info.keys()}, mappings: {douban_to_feishu_header_mappings}, image_token: {bool(image_token)}")
+    logger.debug(f"输入参数 - book_info: {book_info.keys()}, mappings: {douban_to_feishu_header_mappings}")
     
     fields_data_with_headers: Dict[str, Any] = {}
 
@@ -64,7 +64,7 @@ def _prepare_feishu_book_data(book_info: dict, douban_to_feishu_header_mappings:
             'score': lambda: float(book_info.get('score')) if book_info.get('score') else None,
             'url': lambda: {"link": book_info.get('url')} if book_info.get('url') else None,
             'translator': lambda: book_info.get('translator') if book_info.get('translator') else None,
-            'image_token': lambda: _upload_image(book_info)
+            'book_img': lambda: _upload_image(book_info)
         }
 
         # 处理字段
