@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISBN 同步到飞书</title>
+    <title>同步到飞书</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
         <header>
             <h1>图书信息同步</h1>
-            <button id="config-btn" class="config-button">⚙️ 配置</button>
+            <button id="config-btn" class="config-button">⚙️</button>
         </header>
         <main>
             <div class="isbn-input-container">
@@ -24,7 +24,7 @@
 
     <div id="config-drawer" class="drawer">
         <div class="drawer-header">
-            <h2>飞书 API 配置</h2>
+            <h2>飞书配置</h2>
             <button id="close-drawer-btn" class="close-button">&times;</button>
         </div>
         <div class="drawer-content">
@@ -55,6 +55,7 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/background-animation.js') }}"></script>
     <script>
         document.addEventListener('click', function(event) {
             var drawer = document.getElementById('config-drawer');

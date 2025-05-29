@@ -899,3 +899,57 @@ UnboundLocalError: cannot access local variable 'current_image_token' where it i
 2025-05-27 13:07:36,266 - bookinfo2feishu - INFO - 已从文件加载飞书配置
 2025-05-27 13:07:36,266 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
 2025-05-27 13:07:36,449 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 12:53:33,215 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 12:53:33,216 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 12:53:33,446 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 12:53:33,813 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 12:53:33,813 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 12:53:33,925 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 13:52:53,450 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 13:52:53,450 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 13:52:53,639 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 13:52:54,026 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 13:52:54,027 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 13:52:54,173 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 14:12:51,027 - bookinfo2feishu - DEBUG - Using existing, valid tenant access token.
+2025-05-29 14:12:51,029 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-29 14:12:51,593 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.
+2025-05-29 14:52:14,925 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 14:52:14,925 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 14:52:15,180 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 14:52:15,543 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 14:52:15,543 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 14:52:15,695 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 18:28:59,612 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 18:28:59,613 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 18:28:59,855 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 18:30:02,585 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 18:30:02,585 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 18:30:02,743 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 18:30:03,209 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 18:30:03,209 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 18:30:03,387 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 19:43:58,589 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 19:43:58,589 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 19:43:58,910 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 19:43:59,259 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 19:43:59,259 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 19:43:59,884 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 19:52:24,386 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 19:52:24,386 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 19:52:24,619 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 19:52:25,208 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 19:52:25,208 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 19:52:25,372 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 19:55:55,636 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 19:55:55,637 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 19:55:55,865 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 19:55:56,196 - bookinfo2feishu - INFO - 已从文件加载飞书配置
+2025-05-29 19:55:56,196 - bookinfo2feishu - INFO - Tenant access token is missing or expired, requesting a new one.
+2025-05-29 19:55:56,351 - bookinfo2feishu - INFO - Successfully acquired new Feishu Tenant Access Token.
+2025-05-29 20:19:16,022 - bookinfo2feishu - INFO - 获取豆瓣图书信息: 9787522525013
+2025-05-29 20:19:16,024 - bookinfo2feishu - INFO - Attempting to scrape Douban for ISBN: 9787522525013 at URL: https://douban.com/isbn/9787522525013
+2025-05-29 20:19:17,994 - bookinfo2feishu - INFO - Successfully scraped book: 人类知识演化史 (ISBN: 9787522525013)
+2025-05-29 20:19:18,007 - bookinfo2feishu - DEBUG - Using existing, valid tenant access token.
+2025-05-29 20:19:18,007 - bookinfo2feishu - INFO - Requesting table fields for table_id: tblQp2OQgxamLR3x
+2025-05-29 20:19:18,501 - bookinfo2feishu - INFO - Successfully retrieved 18 table fields.

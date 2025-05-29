@@ -1,8 +1,40 @@
-/* 超现代风格 CSS */
+/* Retro Cyberpunk Style CSS */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap');
+
+/* CRT效果 */
+@keyframes flicker {
+    0% { opacity: 0.97; }
+    5% { opacity: 0.95; }
+    10% { opacity: 0.9; }
+    15% { opacity: 0.95; }
+    20% { opacity: 0.98; }
+    25% { opacity: 0.95; }
+    30% { opacity: 0.9; }
+    35% { opacity: 0.95; }
+    40% { opacity: 0.98; }
+    45% { opacity: 0.95; }
+    50% { opacity: 0.9; }
+    55% { opacity: 0.95; }
+    60% { opacity: 0.98; }
+    65% { opacity: 0.95; }
+    70% { opacity: 0.9; }
+    75% { opacity: 0.95; }
+    80% { opacity: 0.98; }
+    85% { opacity: 0.95; }
+    90% { opacity: 0.9; }
+    95% { opacity: 0.95; }
+    100% { opacity: 0.98; }
+}
+
+@keyframes scanline {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100vh); }
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #121212; /* 深色背景 */
-    color: #e0e0e0; /* 浅色文字 */
+    font-family: 'Share Tech Mono', monospace;
+    background-color: #1d0245;
+    color: #00ff95;
     margin: 0;
     padding: 0;
     line-height: 1.6;
@@ -10,19 +42,131 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden; /* 防止抽屉打开时出现水平滚动条 */
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* 糖豆人动画 */
+@keyframes beanMove {
+    0% {
+        transform: translateX(-100px) translateY(var(--y-pos));
+    }
+    100% {
+        transform: translateX(calc(100vw + 100px)) translateY(var(--y-pos));
+    }
+}
+
+@keyframes beanJump {
+    0%, 100% {
+        transform: translateY(0) scale(1, 1);
+    }
+    50% {
+        transform: translateY(-20px) scale(0.9, 1.1);
+    }
+}
+
+@keyframes candyFloat {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        transparent 50%,
+        rgba(0, 0, 0, 0.1) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    animation: scanline 10s linear infinite;
+    opacity: 0.2;
+    z-index: 2;
+}
+
+@keyframes pacmanMouth {
+    0% {
+        clip-path: polygon(100% 50%, 50% 50%, 0 50%, 0 0, 100% 0);
+    }
+    50% {
+        clip-path: polygon(100% 50%, 50% 50%, 50% 50%, 50% 50%, 100% 50%);
+    }
+    100% {
+        clip-path: polygon(100% 50%, 50% 50%, 0 50%, 0 100%, 100% 100%);
+    }
+}
+
+/* 吃豆人动画 */
+@keyframes pacmanMouth {
+    0% {
+        clip-path: polygon(100% 50%, 50% 50%, 0 50%, 0 0, 100% 0);
+    }
+    50% {
+        clip-path: polygon(100% 50%, 50% 50%, 50% 50%, 50% 50%, 100% 50%);
+    }
+    100% {
+        clip-path: polygon(100% 50%, 50% 50%, 0 50%, 0 100%, 100% 100%);
+    }
+}
+
+.bean-character {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    background: #ffff00; /* 经典吃豆人黄色 */
+    border-radius: 50%;
+    z-index: 1;
+    animation: pacmanMouth 0.3s linear infinite;
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+    transition: transform 0.2s ease-out;
+}
+
+.candy {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: #ffffff; /* 经典白色豆子 */
+    border-radius: 50%;
+    z-index: -1;
+    animation: dotBlink 1s ease-in-out infinite;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    opacity: 0.8;
+}
+
+/* 豆子闪烁动画 */
+@keyframes dotBlink {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 0.6;
+    }
 }
 
 .container {
-    background-color: #1e1e1e; /* 稍浅的深色背景 */
+    background-color: rgba(29, 2, 69, 0.95);
     padding: 30px 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* 更深的阴影 */
+    border: 3px solid #403d8a;
+    box-shadow: 0 0 20px rgba(64, 61, 138, 0.3),
+                inset 0 0 20px rgba(64, 61, 138, 0.2);
     width: 90%;
     max-width: 600px;
     text-align: center;
     position: relative;
-    overflow: hidden; /* 确保内容在容器内 */
+    overflow: hidden;
+    animation: flicker 0.3s infinite;
+    border-radius: 0;
 }
 
 header {
@@ -30,149 +174,172 @@ header {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
-    border-bottom: 1px solid #333;
+    border-bottom: 2px solid #ff00ff;
     padding-bottom: 20px;
 }
 
 header h1 {
-    font-size: 2.5em;
-    color: #bb86fc; /* 紫色调，科技感 */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.8em;
+    color: #ff00ff;
     margin: 0;
-    font-weight: 300;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+    letter-spacing: 2px;
 }
 
 .config-button {
     background: none;
-    border: none;
-    color: #03dac6; /* 青色调，科技感 */
-    font-size: 1.8em;
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    font-size: 1.5em;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+    font-family: 'Share Tech Mono', monospace;
 }
 
 .config-button:hover {
-    transform: rotate(45deg);
+    background-color: #00ffff;
+    color: #1a0933;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
 }
 
 .isbn-input-container {
     display: flex;
     margin-bottom: 25px;
-    gap: 10px; /* 输入框和按钮之间的间距 */
+    gap: 10px;
 }
 
 #isbn-input {
     flex-grow: 1;
     padding: 15px;
     font-size: 1.1em;
-    border: 1px solid #333;
-    border-radius: 8px;
-    background-color: #2c2c2c; /* 输入框背景 */
-    color: #e0e0e0;
+    border: 2px solid #403d8a;
+    background-color: rgba(29, 2, 69, 0.8);
+    color: #00ff95;
     outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    font-family: 'Share Tech Mono', monospace;
 }
 
 #isbn-input:focus {
-    border-color: #bb86fc;
-    box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.3);
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(64, 61, 138, 0.3);
 }
 
 #submit-isbn-btn {
     padding: 15px 25px;
     font-size: 1.1em;
-    background-color: #03dac6; /* 青色按钮 */
-    color: #121212; /* 深色文字 */
+    background-color: #ff00ff;
+    color: #1a0933;
     border: none;
-    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
     font-weight: bold;
+    font-family: 'Press Start 2P', cursive;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
 }
 
 #submit-isbn-btn:hover {
-    background-color: #018786; /* 深一点的青色 */
+    background-color: #00ffff;
     transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
 #message-area, #book-info-area {
     margin-top: 20px;
     padding: 15px;
-    border-radius: 8px;
     text-align: left;
     font-size: 0.95em;
+    border: 2px solid;
 }
 
 #message-area.success {
-    background-color: rgba(3, 218, 198, 0.1); /* 青色背景，透明 */
-    color: #03dac6;
-    border: 1px solid #03dac6;
+    background-color: rgba(0, 255, 149, 0.1);
+    color: #00ff95;
+    border-color: #00ff95;
+    box-shadow: 0 0 15px rgba(0, 255, 149, 0.2);
 }
 
 #message-area.error {
-    background-color: rgba(207, 102, 121, 0.1); /* 红色背景，透明 */
-    color: #cf6679; /* Material Design 错误颜色 */
-    border: 1px solid #cf6679;
+    background-color: rgba(255, 0, 255, 0.1);
+    color: #ff00ff;
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
 }
 
 #book-info-area {
-    background-color: #2c2c2c;
-    border: 1px solid #333;
+    background-color: rgba(29, 2, 69, 0.8);
+    border-color: #403d8a;
+    box-shadow: 0 0 15px rgba(64, 61, 138, 0.2);
 }
 
 #book-info-area h3 {
-    color: #bb86fc;
+    color: #00ffff;
     margin-top: 0;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2em;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
-#book-info-area p {
-    margin: 8px 0;
-}
-
-/* 抽屉样式 */
 .drawer {
     position: fixed;
     top: 0;
-    right: -400px; /* 初始状态在屏幕外，宽度可调整 */
-    width: 380px; /* 抽屉宽度 */
+    right: -400px;
+    width: 380px;
     height: 100%;
-    background-color: #2a2a2a; /* 抽屉背景色 */
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* 平滑过渡效果 */
+    background-color: rgba(29, 2, 69, 0.95);
+    box-shadow: -5px 0 20px rgba(64, 61, 138, 0.3);
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* 内容过多时可滚动 */
+    overflow-y: auto;
+    border-left: 3px solid #403d8a;
 }
+
 .drawer.show {
-    right: 0; /* 打开状态 */
+    right: 0;
 }
+
 .drawer-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #333333; /* 抽屉头部背景 */
-    border-bottom: 1px solid #444;
+    background-color: rgba(255, 0, 255, 0.1);
+    border-bottom: 2px solid #ff00ff;
 }
 
 .drawer-header h2 {
     margin: 0;
     font-size: 1.5em;
-    color: #bb86fc;
-    font-weight: 400;
+    color: #ff00ff;
+    font-family: 'Press Start 2P', cursive;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
 }
 
 .close-button {
     background: none;
-    border: none;
-    color: #e0e0e0;
-    font-size: 1.8em;
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    font-size: 1.5em;
     cursor: pointer;
-    transition: color 0.3s ease;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+    font-family: 'Share Tech Mono', monospace;
 }
 
 .close-button:hover {
-    color: #03dac6;
+    background-color: #00ffff;
+    color: #1a0933;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
 }
 
 .drawer-content {
@@ -187,123 +354,67 @@ header h1 {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #aaa;
+    color: #00ff95;
     font-size: 0.9em;
+    text-shadow: 0 0 10px rgba(0, 255, 149, 0.5);
 }
 
 .form-group input[type="text"],
 .form-group input[type="password"] {
-    width: calc(100% - 20px); /* 减去padding */
+    width: 100%;
     padding: 12px;
     font-size: 1em;
-    border: 1px solid #444;
-    border-radius: 6px;
-    background-color: #383838;
-    color: #e0e0e0;
+    border: 2px solid #403d8a;
+    background-color: rgba(29, 2, 69, 0.8);
+    color: #00ff95;
     outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    font-family: 'Share Tech Mono', monospace;
+    box-sizing: border-box;
 }
 
 .form-group input[type="text"]:focus,
 .form-group input[type="password"]:focus {
-    border-color: #bb86fc;
-    box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.25);
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(64, 61, 138, 0.3);
 }
 
 #save-config-btn, #fetch-fields-btn {
     width: 100%;
     padding: 12px;
-    font-size: 1.05em;
-    background-color: #03dac6;
-    color: #121212;
+    font-size: 1em;
+    background-color: #ff00ff;
+    color: #1a0933;
     border: none;
-    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-weight: bold;
+    transition: all 0.3s ease;
+    font-family: 'Press Start 2P', cursive;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     margin-top: 10px;
 }
 
 #save-config-btn:hover, #fetch-fields-btn:hover {
-    background-color: #018786;
+    background-color: #00ffff;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
-#fields-mapping-area {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #333;
-    border-radius: 6px;
-    color: #ccc;
-}
-
-#fields-mapping-area h4 {
-    color: #bb86fc;
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-#fields-mapping-area div {
-    margin-bottom: 8px;
-    font-size: 0.9em;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .container {
-        width: 95%;
-        padding: 20px;
-    }
-    header h1 {
-        font-size: 2em;
-    }
-    .drawer {
-        width: 85%;
-        right: -90%; /* 调整初始位置以适应更宽的抽屉 */
-    }
-}
-
-@media (max-width: 480px) {
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    header h1 {
-        margin-bottom: 10px;
-    }
-    .config-button {
-        align-self: flex-end;
-    }
-    .isbn-input-container {
-        flex-direction: column;
-    }
-    #submit-isbn-btn {
-        width: 100%;
-        margin-top: 10px;
-    }
-    .drawer {
-        width: 100%;
-        right: -100%;
-    }
-}
-
-/* ======================
-   字段映射配置样式
-   ====================== */
 .mapping-section {
     margin: 25px 0;
     padding: 20px;
-    background-color: #2a2a2a;
-    border-radius: 10px;
-    border: 1px solid #333;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background-color: rgba(29, 2, 69, 0.8);
+    border: 2px solid #403d8a;
+    box-shadow: 0 0 15px rgba(64, 61, 138, 0.2);
 }
 
 .mapping-section h4 {
-    color: #bb86fc;
+    color: #ff00ff;
     margin-top: 0;
     margin-bottom: 15px;
-    font-weight: 400;
-    font-size: 1.2em;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1em;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
 }
 
 .field-mapping {
@@ -316,120 +427,90 @@ header h1 {
 .field-mapping span {
     flex: 1;
     font-weight: 500;
-    color: #e0e0e0;
+    color: #00ff95;
+    text-shadow: 0 0 10px rgba(0, 255, 149, 0.5);
 }
 
 .field-select {
     flex: 2;
     padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    background-color: #383838;
-    color: #e0e0e0;
+    border: 2px solid #403d8a;
+    background-color: rgba(29, 2, 69, 0.8);
+    color: #00ff95;
     font-size: 0.95em;
     transition: all 0.3s ease;
     outline: none;
+    font-family: 'Share Tech Mono', monospace;
 }
 
 .field-select:focus {
-    border-color: #bb86fc;
-    box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.25);
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(64, 61, 138, 0.3);
 }
 
 .mapping-button, 
 .sync-button {
-    margin-top: 20px;
     padding: 12px 25px;
     border: none;
-    border-radius: 8px;
     cursor: pointer;
-    font-weight: 500;
-    font-size: 1em;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     transition: all 0.3s ease;
+    margin-top: 20px;
 }
 
 .mapping-button {
-    background-color: #6c757d;
-    color: #e0e0e0;
+    background-color: #ff00ff;
+    color: #1a0933;
 }
 
 .sync-button {
-    background-color: #03dac6;
-    color: #121212;
+    background-color: #00ffff;
+    color: #1a0933;
 }
 
-.mapping-button:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
+.mapping-button:hover,
 .sync-button:hover {
-    background-color: #018786;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
-/* 映射状态指示器 */
 .map-status {
     display: inline-block;
     width: 20px;
     text-align: center;
     font-weight: bold;
     margin-left: 10px;
+    text-shadow: 0 0 10px;
 }
 
 .map-status.mapped {
-    color: #03dac6;
+    color: #00ff95;
 }
 
 .map-status.not-mapped {
-    color: #ff6b6b;
+    color: #ff00ff;
 }
 
-/* 映射摘要区域 */
 .mapping-summary {
     margin-top: 15px;
     padding: 10px;
-    border-radius: 6px;
     font-size: 0.9em;
+    border: 2px solid;
 }
 
 .mapping-summary.has-mappings {
-    background-color: rgba(3, 218, 198, 0.1);
-    border: 1px solid rgba(3, 218, 198, 0.3);
+    background-color: rgba(0, 255, 149, 0.1);
+    border-color: #00ff95;
+    box-shadow: 0 0 15px rgba(0, 255, 149, 0.2);
 }
 
 .mapping-summary.no-mappings {
-    background-color: rgba(255, 107, 107, 0.1);
-    border: 1px solid rgba(255, 107, 107, 0.3);
-}
-
-/* 操作按钮区域 */
-.mapping-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-/* 移动端适配 */
-@media (max-width: 768px) {
-    .field-mapping {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    .field-select {
-        width: 100%;
-    }
-    .mapping-actions {
-        flex-direction: column;
-    }
-    .mapping-button, 
-    .sync-button {
-        width: 100%;
-        margin-top: 0;
-    }
+    background-color: rgba(255, 0, 255, 0.1);
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
 }
 
 .tooltip {
@@ -440,17 +521,18 @@ header h1 {
     cursor: help;
     width: 20px;
     height: 20px;
-    background-color: #03dac6;
-    color: #121212;
-    border-radius: 50%;
+    background-color: #ff00ff;
+    color: #1a0933;
+    border-radius: 0;
     font-size: 14px;
     font-weight: bold;
     transition: all 0.3s ease;
+    font-family: 'Press Start 2P', cursive;
 }
 
 .tooltip:hover {
-    background-color: #018786;
-    transform: scale(1.1);
+    background-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
 }
 
 .tooltip.icon {
@@ -461,43 +543,110 @@ header h1 {
 .tooltip:hover::after {
     content: attr(data-tooltip);
     position: absolute;
-    background-color: #333;
-    color: #fff;
+    background-color: #1a0933;
+    color: #00ff95;
     padding: 8px 12px;
-    border-radius: 6px;
     font-size: 14px;
     white-space: normal;
     word-wrap: break-word;
     z-index: 100;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
     min-width: 200px;
     max-width: 300px;
-    /* 智能定位 - 默认显示在右侧 */
+    border: 2px solid #00ffff;
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
     margin-left: 8px;
+    font-family: 'Share Tech Mono', monospace;
 }
 
-/* 如果右侧空间不足，显示在左侧 */
 @media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    header h1 {
+        font-size: 1.2em;
+    }
+    
+    .drawer {
+        width: 85%;
+        right: -90%;
+    }
+    
     .tooltip:hover::after {
         left: auto;
         right: 100%;
         margin-left: 0;
         margin-right: 8px;
     }
-}
-
-/* 如果上下空间不足，调整垂直位置 */
-.tooltip:hover::after {
-    animation: checkPosition 0.1s forwards;
-}
-
-@keyframes checkPosition {
-    0% { opacity: 0; }
-    100% {
-        opacity: 1;
-        top: clamp(0%, calc(100% - var(--tooltip-height)), 100%);
+    
+    .field-mapping {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
     }
+    
+    .field-select {
+        width: 100%;
+    }
+    
+    .mapping-actions {
+        flex-direction: column;
+    }
+    
+    .mapping-button, 
+    .sync-button {
+        width: 100%;
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    header h1 {
+        margin-bottom: 12px;
+        font-size: 1em;
+    }
+    
+    .config-button {
+        align-self: flex-end;
+    }
+    
+    .isbn-input-container {
+        flex-direction: column;
+    }
+    
+    #submit-isbn-btn {
+        width: 100%;
+        margin-top: 8px;
+    }
+    
+    .drawer {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+#message-area:empty,
+#book-info-area:empty {
+    display: none;
+}
+
+/* ASCII Art Header */
+.ascii-header {
+    font-family: monospace;
+    white-space: pre;
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    font-size: 12px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    text-align: center;
 }
